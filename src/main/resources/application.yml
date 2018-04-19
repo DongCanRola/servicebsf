@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/dsf
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    tomcat:
+      max-active: 20
+      min-idle: 1
+mybatis:
+  type-aliases-package: cn.dcan.entity
+  mapper-locations: classpath:mapping/*.xml
+
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
