@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dcan.mapper.UserRoleMapper" >
+  <resultMap id="BaseResultMap" type="cn.dcan.entity.UserRoleKey" >
+    <id column="userid" property="userid" jdbcType="INTEGER" />
+    <id column="roleid" property="roleid" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="cn.dcan.entity.UserRoleKey" >
+    delete from userrole
+    where userid = #{userid,jdbcType=INTEGER}
+      and roleid = #{roleid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.dcan.entity.UserRoleKey" >
+    insert into userrole (userid, roleid)
+    values (#{userid,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.dcan.entity.UserRoleKey" >
+    insert into userrole
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="roleid != null" >
+        roleid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="roleid != null" >
+        #{roleid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>
