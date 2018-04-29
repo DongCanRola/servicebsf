@@ -16,4 +16,7 @@ public interface UserMapper {
     int updateByPrimaryKeyWithBLOBs(User record);
 
     int updateByPrimaryKey(User record);
+
+    //登录验证
+    User verifyUser(Integer id, byte[] password);
 }

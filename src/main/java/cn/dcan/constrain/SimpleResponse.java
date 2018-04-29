@@ -7,6 +7,7 @@ public class SimpleResponse {
 
     public static final String OK="ok";
     public static final String ERROR="error";
+    public static final String DENIED="denied";
 
     private String result;
     private String message;

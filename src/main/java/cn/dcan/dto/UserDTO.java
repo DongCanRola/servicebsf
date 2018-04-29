@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * Created by dongc_000 on 2018/4/27.
  */
-public class userDTO implements Serializable{
+public class UserDTO implements Serializable{
 
     private int user_id;
     private String user_name;
