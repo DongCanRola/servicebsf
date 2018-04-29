@@ -37,6 +37,8 @@ public class UserServiceImpl implements UserService{
                 }
                 System.out.println("The user does not match the role!");
             }
+        } else {
+            System.out.println("Cannot find the user!");
         }
         return null;
     }
