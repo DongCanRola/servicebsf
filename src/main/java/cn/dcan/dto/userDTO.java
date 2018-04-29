@@ -1,11 +1,12 @@
 package cn.dcan.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by dongc_000 on 2018/4/27.
  */
-public class userDTO {
+public class userDTO implements Serializable{
 
     private int user_id;
     private String user_name;

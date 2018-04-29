@@ -5,8 +5,6 @@ public class User {
 
     private String name;
 
-    private String password;
-
     private String phone;
 
     private String qqnumber;
@@ -14,6 +12,8 @@ public class User {
     private String wechat;
 
     private String email;
+
+    private byte[] password;
 
     public Integer getId() {
         return id;
@@ -29,14 +29,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
     }
 
     public String getPhone() {
@@ -69,5 +61,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email == null ? null : email.trim();
+    }
+
+    public byte[] getPassword() {
+        return password;
+    }
+
+    public void setPassword(byte[] password) {
+        this.password = password;
     }
 }
