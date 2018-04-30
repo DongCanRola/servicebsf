@@ -1,5 +1,7 @@
 package cn.dcan.mapper;
 
+import java.util.*;
+
 import cn.dcan.entity.User;
 
 public interface UserMapper {
@@ -19,4 +21,7 @@ public interface UserMapper {
 
     //登录验证
     User verifyUser(Integer id, byte[] password);
+
+    //获取所有用户
+    List<User> getUserList();
 }

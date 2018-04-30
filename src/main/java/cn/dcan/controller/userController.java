@@ -2,6 +2,7 @@ package cn.dcan.controller;
 
 import cn.dcan.Service.UserService;
 import cn.dcan.dto.UserDTO;
+import cn.dcan.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,8 @@ import javax.ws.rs.core.Response;
 
 import cn.dcan.constrain.SimpleResponse;
 import cn.dcan.constrain.DataResponse;
+
+import java.util.List;
 
 /**
  * Created by dongc_000 on 2018/4/26.
@@ -44,6 +47,24 @@ public class userController {
             return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "验证失败！")).build();
         }
         //return Response.ok(new SimpleResponse(SimpleResponse.OK,"连接成功！")).build();
+    }
+
+    //获取所有用户
+    @RequestMapping(value = "/userList", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getAllUser() {
+        System.out.println("Get the list of all users");
+        List<UserDTO> users = userService.getUserList();
+        return Response.ok(users).build();
+    }
+
+    //
+    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    @ResponseBody
+    public Response addUser(@RequestBody UserDTO userDTO) {
+        System.out.println("prepare to add user!");
+        int newId = userService.addUser(userDTO);
+        return Response.ok(new SimpleResponse(SimpleResponse.OK,Integer.toString(newId))).build();
     }
 
 }
