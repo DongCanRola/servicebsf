@@ -36,9 +36,23 @@ public class CustomerServiceImpl implements CustomerService{
         return customer.getId();
     }
 
+    @Override
+    public List<CustomerDTO> getListByProvide(int type) {
+        List<Customer> customers = customerMapper.selectByProvide(type);
+        List<CustomerDTO> customerDTOS = new ArrayList<>();
+        for(Customer customer : customers) {
+            customerDTOS.add(entityToDto(customer));
+        }
+        return customerDTOS;
+    }
+
     private Customer dtoToEntity(CustomerDTO customerDTO) {
         Customer customer = new Customer();
         customer.setType(customerDTO.getType());
+        Integer provideType = customerDTO.getProvideType();
+        if(provideType != null) {
+            customer.setProvidetype(customerDTO.getProvideType());
+        }
         customer.setName(customerDTO.getName());
         customer.setManager(customerDTO.getManager());
         customer.setTelephone(customerDTO.getTelephone());

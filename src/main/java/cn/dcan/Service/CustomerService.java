@@ -13,4 +13,7 @@ public interface CustomerService {
     List<CustomerDTO> getListByType(int type);
 
     int addCustomer(CustomerDTO customerDTO);
+
+    //根据供应类型获取供应商列表
+    List<CustomerDTO> getListByProvide(int type);
 }

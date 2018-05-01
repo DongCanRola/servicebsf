@@ -22,11 +22,19 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
-    @RequestMapping(value = "/customer/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/customer/saleList", method = RequestMethod.GET)
     @ResponseBody
     public Response getCustomers(HttpServletRequest request) {
         int type = Integer.parseInt(request.getHeader("customerType"));
         List<CustomerDTO> result = customerService.getListByType(type);
+        return Response.ok(result).build();
+    }
+
+    @RequestMapping(value = "/customer/provideList", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getProvides(HttpServletRequest request) {
+        int type = Integer.parseInt(request.getHeader("provideType"));
+        List<CustomerDTO> result = customerService.getListByProvide(type);
         return Response.ok(result).build();
     }
 

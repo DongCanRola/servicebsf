@@ -134,4 +134,11 @@
     from customer
     where type = #{type, jdbcType=INTEGER}
   </select>
+  <select id="selectByProvide" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List" />
+    from customer
+    where type = 1
+    and providetype = #{providetype, jdbcType=INTEGER}
+  </select>
 </mapper>

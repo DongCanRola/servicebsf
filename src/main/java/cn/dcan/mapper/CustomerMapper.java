@@ -19,4 +19,7 @@ public interface CustomerMapper {
 
     //根据类型得到用户列表
     List<Customer> selectByType(int type);
+
+    //根据供应类型获取供应商列表
+    List<Customer> selectByProvide(int providetype);
 }
