@@ -19,7 +19,7 @@ import java.util.List;
  * Created by dongc_000 on 2018/4/26.
  */
 @RestController
-public class userController {
+public class UserController {
 
     @Autowired
     UserService userService;
@@ -50,7 +50,7 @@ public class userController {
     }
 
     //获取所有用户
-    @RequestMapping(value = "/userList", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/list", method = RequestMethod.GET)
     @ResponseBody
     public Response getAllUser() {
         System.out.println("Get the list of all users");
@@ -59,7 +59,7 @@ public class userController {
     }
 
     //
-    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/add", method = RequestMethod.POST)
     @ResponseBody
     public Response addUser(@RequestBody UserDTO userDTO) {
         System.out.println("prepare to add user!");
