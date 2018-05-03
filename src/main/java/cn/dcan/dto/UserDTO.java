@@ -14,7 +14,7 @@ public class UserDTO implements Serializable{
     private String qqnumber;
     private String wechat;
     private String email;
-    private byte[] password;
+    private String password;
     private ArrayList<Integer> user_roles;
 
     public void setUser_id(int id) {
@@ -59,10 +59,10 @@ public class UserDTO implements Serializable{
         return this.email;
     }
 
-    public void setPassword(byte[] password) {
+    public void setPassword(String password) {
         this.password = password;
     }
-    public byte[] getPassword() {
+    public String getPassword() {
         return this.password;
     }
 

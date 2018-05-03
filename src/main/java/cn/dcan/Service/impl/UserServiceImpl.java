@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService{
             user.setEmail(userDTO.getEmail());
         }
         if(userDTO.getPassword() != null) {
-            user.setPassword(userDTO.getPassword());
+            user.setPassword(userDTO.getPassword().getBytes());
         }
         return user;
     }

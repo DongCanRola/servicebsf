@@ -10,7 +10,7 @@
     <result column="email" property="email" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="cn.dcan.entity.User" extends="BaseResultMap" >
-    <result column="password" property="password" jdbcType="LONGVARBINARY" />
+    <result column="password" property="password" jdbcType="BLOB" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, name, phone, qqnumber, wechat, email
@@ -36,7 +36,7 @@
       password)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=CHAR}, 
       #{qqnumber,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{password,jdbcType=LONGVARBINARY})
+      #{password,jdbcType=BLOB})
   </insert>
   <insert id="insertSelective" useGeneratedKeys="true" parameterType="cn.dcan.entity.User" >
     insert into user
@@ -83,7 +83,7 @@
         #{email,jdbcType=VARCHAR},
       </if>
       <if test="password != null" >
-        #{password,jdbcType=LONGVARBINARY},
+        #{password,jdbcType=BLOB},
       </if>
     </trim>
     <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
@@ -109,7 +109,7 @@
         email = #{email,jdbcType=VARCHAR},
       </if>
       <if test="password != null" >
-        password = #{password,jdbcType=LONGVARBINARY},
+        password = #{password,jdbcType=BLOB},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -121,7 +121,7 @@
       qqnumber = #{qqnumber,jdbcType=VARCHAR},
       wechat = #{wechat,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
-      password = #{password,jdbcType=LONGVARBINARY}
+      password = #{password,jdbcType=BLOB}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.dcan.entity.User" >
@@ -138,7 +138,7 @@
     <include refid="Base_Column_List" />
     from user
     where id = #{id,jdbcType=INTEGER}
-    and password = #{password, jdbcType=LONGVARBINARY}
+    and password = #{password, jdbcType=BLOB}
   </select>
   <select id="getUserList" resultMap="BaseResultMap">
     select

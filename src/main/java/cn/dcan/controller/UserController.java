@@ -64,6 +64,7 @@ public class UserController {
     public Response addUser(@RequestBody UserDTO userDTO) {
         System.out.println("prepare to add user!");
         int newId = userService.addUser(userDTO);
+        System.out.println(userDTO.getPassword());
         return Response.ok(new SimpleResponse(SimpleResponse.OK,Integer.toString(newId))).build();
     }
 
