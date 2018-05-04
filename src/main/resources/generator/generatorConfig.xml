@@ -49,5 +49,7 @@
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
         <table tableName="warehouse" domainObjectName="Warehouse" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="savings" domainObjectName="Savings" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
     </context>
 </generatorConfiguration>
