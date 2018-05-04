@@ -1,6 +1,6 @@
 package cn.dcan.controller;
 
-import cn.dcan.Service.SavingsService;
+import cn.dcan.Service.AccountService;
 import cn.dcan.dto.SavingsDTO;
 import cn.dcan.constrain.*;
 
@@ -14,15 +14,15 @@ import java.util.*;
  * Created by dongc_000 on 2018/5/4.
  */
 @RestController
-public class SavingsController {
+public class AccountController {
 
     @Autowired
-    SavingsService savingsService;
+    AccountService accountService;
 
     @RequestMapping(value = "/savings/list", method = RequestMethod.GET)
     @ResponseBody
     public Response getAllSavings() {
-        List<SavingsDTO> savingsDTOList = savingsService.getAllSavings();
+        List<SavingsDTO> savingsDTOList = accountService.getAllSavings();
         if(savingsDTOList != null) {
             System.out.println("成功获取存储列表！");
             return Response.ok(savingsDTOList).build();
@@ -35,7 +35,7 @@ public class SavingsController {
     @RequestMapping(value = "/savings/add", method = RequestMethod.POST)
     @ResponseBody
     public Response addSavings(@RequestBody SavingsDTO savingsDTO) {
-        String newSavings = savingsService.addSavings(savingsDTO);
+        String newSavings = accountService.addSavings(savingsDTO);
         if(newSavings != null) {
             System.out.println("成功增加存储！");
             return Response.ok(new SimpleResponse(SimpleResponse.OK,newSavings)).build();

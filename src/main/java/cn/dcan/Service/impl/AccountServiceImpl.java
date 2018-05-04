@@ -1,6 +1,6 @@
 package cn.dcan.Service.impl;
 
-import cn.dcan.Service.SavingsService;
+import cn.dcan.Service.AccountService;
 import cn.dcan.dto.SavingsDTO;
 import cn.dcan.entity.Savings;
 import cn.dcan.mapper.SavingsMapper;
@@ -14,7 +14,7 @@ import java.util.List;
  * Created by dongc_000 on 2018/5/4.
  */
 @Service
-public class SavingsServiceImpl implements SavingsService{
+public class AccountServiceImpl implements AccountService {
 
     @Autowired
     SavingsMapper savingsMapper;
