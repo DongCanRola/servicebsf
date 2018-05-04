@@ -11,5 +11,5 @@ import java.util.List;
 public interface AccountService {
 
     List<SavingsDTO> getAllSavings();
-    String addSavings(SavingsDTO savingsDTO);
+    void addSavings(SavingsDTO savingsDTO);
 }

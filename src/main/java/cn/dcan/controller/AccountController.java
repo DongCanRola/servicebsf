@@ -35,13 +35,7 @@ public class AccountController {
     @RequestMapping(value = "/savings/add", method = RequestMethod.POST)
     @ResponseBody
     public Response addSavings(@RequestBody SavingsDTO savingsDTO) {
-        String newSavings = accountService.addSavings(savingsDTO);
-        if(newSavings != null) {
-            System.out.println("成功增加存储！");
-            return Response.ok(new SimpleResponse(SimpleResponse.OK,newSavings)).build();
-        } else {
-            System.out.println("增加存储失败！");
-            return Response.ok(new SimpleResponse(SimpleResponse.ERROR,"新增存储失败！")).build();
-        }
+        accountService.addSavings(savingsDTO);
+        return Response.ok(new SimpleResponse(SimpleResponse.OK,"添加成功！")).build();
     }
 }

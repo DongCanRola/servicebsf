@@ -30,10 +30,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String addSavings(SavingsDTO savingsDTO) {
+    public void addSavings(SavingsDTO savingsDTO) {
         Savings savings = dtoToEntity(savingsDTO);
         int count = savingsMapper.insert(savings);
-        return savings.getId();
+        System.out.println("添加成功，个数：" + count);
     }
 
     private SavingsDTO entityToDto(Savings savings) {
@@ -46,6 +46,7 @@ public class AccountServiceImpl implements AccountService {
 
     private Savings dtoToEntity(SavingsDTO savingsDTO) {
         Savings savings = new Savings();
+        savings.setId(savingsDTO.getSavings_id());
         savings.setBank(savingsDTO.getSavings_bank());
         savings.setBalance(savingsDTO.getSavings_balance());
         return savings;
