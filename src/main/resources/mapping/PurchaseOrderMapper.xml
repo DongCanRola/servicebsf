@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dcan.mapper.PurchaseOrderMapper" >
+  <resultMap id="BaseResultMap" type="cn.dcan.entity.PurchaseOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="goodsid" property="goodsid" jdbcType="INTEGER" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="providerid" property="providerid" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="ordertime" property="ordertime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, goodsid, num, price, providerid, state, ordertime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from purchaseorder
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from purchaseorder
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.dcan.entity.PurchaseOrder" >
+    insert into purchaseorder (id, goodsid, num, 
+      price, providerid, state, 
+      ordertime)
+    values (#{id,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER}, #{num,jdbcType=INTEGER}, 
+      #{price,jdbcType=DOUBLE}, #{providerid,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, 
+      #{ordertime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.dcan.entity.PurchaseOrder" >
+    insert into purchaseorder
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="goodsid != null" >
+        goodsid,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="providerid != null" >
+        providerid,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="ordertime != null" >
+        ordertime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="goodsid != null" >
+        #{goodsid,jdbcType=INTEGER},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="providerid != null" >
+        #{providerid,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="ordertime != null" >
+        #{ordertime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.dcan.entity.PurchaseOrder" >
+    update purchaseorder
+    <set >
+      <if test="goodsid != null" >
+        goodsid = #{goodsid,jdbcType=INTEGER},
+      </if>
+      <if test="num != null" >
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="providerid != null" >
+        providerid = #{providerid,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="ordertime != null" >
+        ordertime = #{ordertime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.dcan.entity.PurchaseOrder" >
+    update purchaseorder
+    set goodsid = #{goodsid,jdbcType=INTEGER},
+      num = #{num,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE},
+      providerid = #{providerid,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      ordertime = #{ordertime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getAllOrders" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from purchaseorder
+  </select>
+  <select id="getOrdersByState" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from purchaseorder
+    where state = #{state,jdbcType=INTEGER}
+  </select>
+</mapper>
