@@ -38,6 +38,7 @@ public class PurchaseController {
     @ResponseBody
     public Response addOrder(@RequestBody PurchaseDTO purchaseDTO) {
         int newOrder = purchaseService.addPurchaseOrder(purchaseDTO);
+        System.out.println("new purchase order: " + newOrder);
         if(newOrder > 0) {
             return Response.ok(new SimpleResponse(SimpleResponse.OK,Integer.toString(newOrder))).build();
         }

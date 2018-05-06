@@ -24,6 +24,9 @@ public class ConcreteDataFormat {
     }
 
     public String DateToString(Date date) {
-        return dateFormat.format(date);
+        if(date != null) {
+            return dateFormat.format(date);
+        }
+        return null;
     }
 }
