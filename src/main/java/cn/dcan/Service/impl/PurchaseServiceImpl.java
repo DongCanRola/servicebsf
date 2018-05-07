@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,7 +47,9 @@ public class PurchaseServiceImpl implements PurchaseService{
 
     @Override
     public List<PurchaseDTO> getOrdersByState(int state) {
+        System.out.println("select state service: " + state);
         List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.getOrdersByState(state);
+        System.out.println(purchaseOrders);
         List<PurchaseDTO> purchaseDTOS = new ArrayList<>();
         Goods goods = null;
         Customer customer = null;
@@ -89,10 +92,22 @@ public class PurchaseServiceImpl implements PurchaseService{
     private PurchaseOrder dtoToEntity(PurchaseDTO purchaseDTO) {
         PurchaseOrder purchaseOrder = new PurchaseOrder();
         purchaseOrder.setId(purchaseDTO.getPurchaseOrder_id());
-        purchaseOrder.setGoodsid(purchaseDTO.getPurchaseGoods_id());
-        purchaseOrder.setNum(purchaseDTO.getPurchase_num());
-        purchaseOrder.setPrice(purchaseDTO.getPurchase_price());
-        purchaseOrder.setProviderid(purchaseDTO.getProvider_id());
+        if(purchaseDTO.getPurchaseGoods_id() != 0) {
+            purchaseOrder.setGoodsid(purchaseDTO.getPurchaseGoods_id());
+        }
+        //purchaseOrder.setGoodsid(purchaseDTO.getPurchaseGoods_id());
+        if(purchaseDTO.getPurchase_num() != 0) {
+            purchaseOrder.setNum(purchaseDTO.getPurchase_num());
+        }
+        //purchaseOrder.setNum(purchaseDTO.getPurchase_num());
+        if(purchaseDTO.getPurchase_price() != 0) {
+            purchaseOrder.setPrice(purchaseDTO.getPurchase_price());
+        }
+        //purchaseOrder.setPrice(purchaseDTO.getPurchase_price());
+        if(purchaseDTO.getProvider_id() != 0) {
+            purchaseOrder.setProviderid(purchaseDTO.getProvider_id());
+        }
+        //purchaseOrder.setProviderid(purchaseDTO.getProvider_id());
         if(purchaseDTO.getPurchase_state() != 0) {
             purchaseOrder.setState(purchaseDTO.getPurchase_state());
         }

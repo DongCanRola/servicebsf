@@ -1,6 +1,7 @@
 package cn.dcan.Service.impl;
 
 import cn.dcan.Service.AccountService;
+import cn.dcan.dto.PurchaseDTO;
 import cn.dcan.dto.SavingsDTO;
 import cn.dcan.entity.Savings;
 import cn.dcan.mapper.SavingsMapper;
@@ -34,6 +35,11 @@ public class AccountServiceImpl implements AccountService {
         Savings savings = dtoToEntity(savingsDTO);
         int count = savingsMapper.insert(savings);
         System.out.println("添加成功，个数：" + count);
+    }
+
+    @Override
+    public void addPurchasePay(PurchaseDTO purchaseDTO) {
+
     }
 
     private SavingsDTO entityToDto(Savings savings) {

@@ -14,6 +14,7 @@ public class PurchaseDTO {
     private String provider_name;
     private int purchase_state;
     private String purchase_time;
+    private int purchaseReturn_num;
 
     public void setPurchaseOrder_id(int id) {
         this.purchaseOrder_id = id;

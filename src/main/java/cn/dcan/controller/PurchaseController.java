@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,6 +19,8 @@ public class PurchaseController {
 
     @Autowired
     PurchaseService purchaseService;
+
+    private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
     @RequestMapping(value = "/purchase/order/list", method = RequestMethod.GET)
     @ResponseBody
@@ -30,6 +33,7 @@ public class PurchaseController {
     @ResponseBody
     public Response getOrdersByState(HttpServletRequest request) {
         int state = Integer.parseInt(request.getHeader("orderState"));
+        System.out.println("select state: " + state);
         List<PurchaseDTO> purchaseDTOS = purchaseService.getOrdersByState(state);
         return Response.ok(purchaseDTOS).build();
     }
@@ -51,6 +55,10 @@ public class PurchaseController {
         //int changedId = Integer.parseInt(request.getHeader("order_id"));
         //int toState = Integer.parseInt(request.getHeader("state"));
         //System.out.println("更改定订单" + changedId + "的状态为" + toState);
+        if(purchaseDTO.getPurchase_state() == 2) {
+            Date date = new Date();
+            purchaseDTO.setPurchase_time(concreteDataFormat.DateToString(date));
+        }
         boolean result = false;
         result = purchaseService.changeOrderContent(purchaseDTO);
         if(result) {
