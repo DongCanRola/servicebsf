@@ -65,6 +65,13 @@ public class PurchaseServiceImpl implements PurchaseService{
         return purchaseOrder.getId();
     }
 
+    @Override
+    public boolean changeOrderContent(PurchaseDTO purchaseDTO) {
+        PurchaseOrder purchaseOrder = dtoToEntity(purchaseDTO);
+        purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
+        return true;
+    }
+
     private PurchaseDTO entityToDto(PurchaseOrder purchaseOrder, Goods goods, Customer customer) {
         PurchaseDTO purchaseDTO = new PurchaseDTO();
         purchaseDTO.setPurchaseOrder_id(purchaseOrder.getId());
@@ -86,10 +93,15 @@ public class PurchaseServiceImpl implements PurchaseService{
         purchaseOrder.setNum(purchaseDTO.getPurchase_num());
         purchaseOrder.setPrice(purchaseDTO.getPurchase_price());
         purchaseOrder.setProviderid(purchaseDTO.getProvider_id());
-        Integer state = purchaseDTO.getPurchase_state();
-        if(state != null) {
+        if(purchaseDTO.getPurchase_state() != 0) {
             purchaseOrder.setState(purchaseDTO.getPurchase_state());
         }
+        /*
+        Integer state = purchaseDTO.getPurchase_state();
+        if(state != null) {
+
+        }
+         */
         purchaseOrder.setOrdertime(concreteDataFormat.StringToDate(purchaseDTO.getPurchase_time()));
         return purchaseOrder;
     }

@@ -44,4 +44,19 @@ public class PurchaseController {
         }
         return Response.ok(new SimpleResponse(SimpleResponse.ERROR,"添加订单失败！")).build();
     }
+
+    @RequestMapping(value = "/purchase/order/stateChange", method = RequestMethod.PUT)
+    @ResponseBody
+    public Response changeState(@RequestBody PurchaseDTO purchaseDTO) {
+        //int changedId = Integer.parseInt(request.getHeader("order_id"));
+        //int toState = Integer.parseInt(request.getHeader("state"));
+        //System.out.println("更改定订单" + changedId + "的状态为" + toState);
+        boolean result = false;
+        result = purchaseService.changeOrderContent(purchaseDTO);
+        if(result) {
+            return Response.ok(new SimpleResponse(SimpleResponse.OK,"订单状态更改成功！")).build();
+        } else {
+            return Response.ok(new SimpleResponse(SimpleResponse.ERROR,"订单状态更改失败！")).build();
+        }
+    }
 }

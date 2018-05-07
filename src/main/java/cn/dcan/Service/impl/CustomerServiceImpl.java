@@ -49,10 +49,15 @@ public class CustomerServiceImpl implements CustomerService{
     private Customer dtoToEntity(CustomerDTO customerDTO) {
         Customer customer = new Customer();
         customer.setType(customerDTO.getType());
+        if(customerDTO.getProvideType() != 0) {
+            customer.setProvidetype(customerDTO.getProvideType());
+        }
+        /*
         Integer provideType = customerDTO.getProvideType();
         if(provideType != null) {
             customer.setProvidetype(customerDTO.getProvideType());
         }
+         */
         customer.setName(customerDTO.getName());
         customer.setManager(customerDTO.getManager());
         customer.setTelephone(customerDTO.getTelephone());

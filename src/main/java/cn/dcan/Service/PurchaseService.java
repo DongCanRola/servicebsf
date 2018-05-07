@@ -14,4 +14,6 @@ public interface PurchaseService {
     List<PurchaseDTO> getOrdersByState(int state);
 
     int addPurchaseOrder(PurchaseDTO purchaseDTO);
+
+    boolean changeOrderContent(PurchaseDTO purchaseDTO);
 }
