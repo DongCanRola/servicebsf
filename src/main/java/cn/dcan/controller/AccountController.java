@@ -1,6 +1,7 @@
 package cn.dcan.controller;
 
 import cn.dcan.Service.AccountService;
+import cn.dcan.dto.PurchasePayDTO;
 import cn.dcan.dto.SavingsDTO;
 import cn.dcan.constrain.*;
 
@@ -37,5 +38,12 @@ public class AccountController {
     public Response addSavings(@RequestBody SavingsDTO savingsDTO) {
         accountService.addSavings(savingsDTO);
         return Response.ok(new SimpleResponse(SimpleResponse.OK,"添加成功！")).build();
+    }
+
+    @RequestMapping(value = "/purchase/pay/list", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getPurchasePayList() {
+        List<PurchasePayDTO> purchasePayDTOS;
+        return Response.ok().build();
     }
 }

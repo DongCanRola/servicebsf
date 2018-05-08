@@ -2,9 +2,12 @@ package cn.dcan.Service.impl;
 
 import cn.dcan.Service.AccountService;
 import cn.dcan.dto.PurchaseDTO;
+import cn.dcan.dto.PurchasePayDTO;
 import cn.dcan.dto.SavingsDTO;
 import cn.dcan.entity.PurchasePay;
 import cn.dcan.entity.Savings;
+import cn.dcan.mapper.PurchaseOrderMapper;
+import cn.dcan.mapper.PurchasePayDetailMapper;
 import cn.dcan.mapper.PurchasePayMapper;
 import cn.dcan.mapper.SavingsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,10 @@ public class AccountServiceImpl implements AccountService {
     SavingsMapper savingsMapper;
     @Autowired
     PurchasePayMapper purchasePayMapper;
+    @Autowired
+    PurchaseOrderMapper purchaseOrderMapper;
+    @Autowired
+    PurchasePayDetailMapper purchasePayDetailMapper;
 
     @Override
     public List<SavingsDTO> getAllSavings() {
@@ -51,6 +58,13 @@ public class AccountServiceImpl implements AccountService {
         purchasePay.setTotal(total);
         purchasePay.setSurplus(total - discount);
         purchasePayMapper.insertSelective(purchasePay);
+    }
+
+    @Override
+    public List<PurchasePayDTO> getPurchasePayList() {
+        List<PurchasePay> purchasePays = purchasePayMapper.selectAll();
+
+        return null;
     }
 
     private SavingsDTO entityToDto(Savings savings) {

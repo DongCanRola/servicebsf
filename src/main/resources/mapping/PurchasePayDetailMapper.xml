@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dcan.mapper.PurchasePayDetailMapper" >
+  <resultMap id="BaseResultMap" type="cn.dcan.entity.PurchasePayDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="payid" property="payid" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="DOUBLE" />
+    <result column="paytime" property="paytime" jdbcType="TIMESTAMP" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="savingsid" property="savingsid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, payid, money, paytime, userid, savingsid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from purchasepaydetail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from purchasepaydetail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.dcan.entity.PurchasePayDetail" >
+    insert into purchasepaydetail (id, payid, money, 
+      paytime, userid, savingsid
+      )
+    values (#{id,jdbcType=INTEGER}, #{payid,jdbcType=INTEGER}, #{money,jdbcType=DOUBLE}, 
+      #{paytime,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER}, #{savingsid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.dcan.entity.PurchasePayDetail" >
+    insert into purchasepaydetail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="payid != null" >
+        payid,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="paytime != null" >
+        paytime,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="savingsid != null" >
+        savingsid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="payid != null" >
+        #{payid,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="paytime != null" >
+        #{paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="savingsid != null" >
+        #{savingsid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.dcan.entity.PurchasePayDetail" >
+    update purchasepaydetail
+    <set >
+      <if test="payid != null" >
+        payid = #{payid,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="paytime != null" >
+        paytime = #{paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="savingsid != null" >
+        savingsid = #{savingsid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.dcan.entity.PurchasePayDetail" >
+    update purchasepaydetail
+    set payid = #{payid,jdbcType=INTEGER},
+      money = #{money,jdbcType=DOUBLE},
+      paytime = #{paytime,jdbcType=TIMESTAMP},
+      userid = #{userid,jdbcType=INTEGER},
+      savingsid = #{savingsid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

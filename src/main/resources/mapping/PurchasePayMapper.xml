@@ -90,4 +90,9 @@
       discount = #{discount,jdbcType=DOUBLE}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from purchasepay
+  </select>
 </mapper>
