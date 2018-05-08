@@ -12,6 +12,7 @@ public class PurchasePayDTO {
     private double actual_total;
     private double already_pay;
     private double surplus;
+    private String order_time;
 
     public void setPurchasePay_id(int id) {
         this.purchasePay_id = id;
@@ -62,5 +63,12 @@ public class PurchasePayDTO {
 
     public double getSurplus() {
         return this.surplus;
+    }
+
+    public void setOrder_time(String theTime) {
+        this.order_time = theTime;
+    }
+    public String getOrder_time() {
+        return this.order_time;
     }
 }

@@ -1,5 +1,6 @@
 package cn.dcan.controller;
 
+import cn.dcan.Service.AccountService;
 import cn.dcan.Service.PurchaseService;
 import cn.dcan.dto.PurchaseDTO;
 import cn.dcan.constrain.*;
@@ -19,6 +20,8 @@ public class PurchaseController {
 
     @Autowired
     PurchaseService purchaseService;
+    @Autowired
+    AccountService accountService;
 
     private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
@@ -58,6 +61,7 @@ public class PurchaseController {
         if(purchaseDTO.getPurchase_state() == 2) {
             Date date = new Date();
             purchaseDTO.setPurchase_time(concreteDataFormat.DateToString(date));
+            accountService.addPurchasePay(purchaseDTO);
         }
         boolean result = false;
         result = purchaseService.changeOrderContent(purchaseDTO);

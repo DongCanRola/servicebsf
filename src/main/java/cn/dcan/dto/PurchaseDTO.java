@@ -15,6 +15,7 @@ public class PurchaseDTO {
     private int purchase_state;
     private String purchase_time;
     private int purchaseReturn_num;
+    private double purchase_discount;
 
     public void setPurchaseOrder_id(int id) {
         this.purchaseOrder_id = id;
@@ -77,5 +78,19 @@ public class PurchaseDTO {
     }
     public String getPurchase_time() {
         return this.purchase_time;
+    }
+
+    public void setPurchaseReturn_num(int num) {
+        this.purchaseReturn_num = num;
+    }
+    public int getPurchaseReturn_num() {
+        return this.purchaseReturn_num;
+    }
+
+    public void setPurchase_discount(double discount) {
+        this.purchase_discount = discount;
+    }
+    public double getPurchase_discount() {
+        return this.purchase_discount;
     }
 }
