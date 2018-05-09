@@ -43,7 +43,7 @@ public class AccountController {
     @RequestMapping(value = "/purchase/pay/list", method = RequestMethod.GET)
     @ResponseBody
     public Response getPurchasePayList() {
-        List<PurchasePayDTO> purchasePayDTOS;
-        return Response.ok().build();
+        List<PurchasePayDTO> purchasePayDTOS = accountService.getPurchasePayList();
+        return Response.ok(purchasePayDTOS).build();
     }
 }

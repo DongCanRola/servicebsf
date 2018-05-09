@@ -103,4 +103,10 @@
       savingsid = #{savingsid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectByPayId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from purchasepaydetail
+    where payid = #{payid,jdbcType=INTEGER}
+  </select>
 </mapper>
