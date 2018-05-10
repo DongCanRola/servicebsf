@@ -1,6 +1,7 @@
 package cn.dcan.mapper;
 
 import cn.dcan.entity.PurchasePayDetail;
+
 import java.util.List;
 
 public interface PurchasePayDetailMapper {
@@ -15,6 +16,8 @@ public interface PurchasePayDetailMapper {
     int updateByPrimaryKeySelective(PurchasePayDetail record);
 
     int updateByPrimaryKey(PurchasePayDetail record);
+
+    List<PurchasePayDetail> selectAll();
 
     List<PurchasePayDetail> selectByPayId(Integer payid);
 }

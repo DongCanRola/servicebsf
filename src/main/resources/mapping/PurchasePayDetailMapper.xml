@@ -7,7 +7,7 @@
     <result column="money" property="money" jdbcType="DOUBLE" />
     <result column="paytime" property="paytime" jdbcType="TIMESTAMP" />
     <result column="userid" property="userid" jdbcType="INTEGER" />
-    <result column="savingsid" property="savingsid" jdbcType="INTEGER" />
+    <result column="savingsid" property="savingsid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, payid, money, paytime, userid, savingsid
@@ -27,10 +27,10 @@
       paytime, userid, savingsid
       )
     values (#{id,jdbcType=INTEGER}, #{payid,jdbcType=INTEGER}, #{money,jdbcType=DOUBLE}, 
-      #{paytime,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER}, #{savingsid,jdbcType=INTEGER}
+      #{paytime,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER}, #{savingsid,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="cn.dcan.entity.PurchasePayDetail" >
+  <insert id="insertSelective" useGeneratedKeys="true" parameterType="cn.dcan.entity.PurchasePayDetail" >
     insert into purchasepaydetail
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -69,9 +69,12 @@
         #{userid,jdbcType=INTEGER},
       </if>
       <if test="savingsid != null" >
-        #{savingsid,jdbcType=INTEGER},
+        #{savingsid,jdbcType=VARCHAR},
       </if>
     </trim>
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="cn.dcan.entity.PurchasePayDetail" >
     update purchasepaydetail
@@ -89,7 +92,7 @@
         userid = #{userid,jdbcType=INTEGER},
       </if>
       <if test="savingsid != null" >
-        savingsid = #{savingsid,jdbcType=INTEGER},
+        savingsid = #{savingsid,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -100,7 +103,7 @@
       money = #{money,jdbcType=DOUBLE},
       paytime = #{paytime,jdbcType=TIMESTAMP},
       userid = #{userid,jdbcType=INTEGER},
-      savingsid = #{savingsid,jdbcType=INTEGER}
+      savingsid = #{savingsid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPayId" resultMap="BaseResultMap">
@@ -108,5 +111,10 @@
     <include refid="Base_Column_List" />
     from purchasepaydetail
     where payid = #{payid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from purchasepaydetail
   </select>
 </mapper>

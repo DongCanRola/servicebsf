@@ -2,12 +2,14 @@ package cn.dcan.controller;
 
 import cn.dcan.Service.AccountService;
 import cn.dcan.dto.PurchasePayDTO;
+import cn.dcan.dto.PurchasePayDetailDTO;
 import cn.dcan.dto.SavingsDTO;
 import cn.dcan.constrain.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 import java.util.*;
 
@@ -19,6 +21,8 @@ public class AccountController {
 
     @Autowired
     AccountService accountService;
+
+    private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
     @RequestMapping(value = "/savings/list", method = RequestMethod.GET)
     @ResponseBody
@@ -45,5 +49,29 @@ public class AccountController {
     public Response getPurchasePayList() {
         List<PurchasePayDTO> purchasePayDTOS = accountService.getPurchasePayList();
         return Response.ok(purchasePayDTOS).build();
+    }
+
+    @RequestMapping(value = "/purchase/pay/detail/add", method = RequestMethod.POST)
+    @ResponseBody
+    public Response addPurchasePayDetail(@RequestBody PurchasePayDetailDTO purchasePayDetailDTO) {
+        Date date = new Date();
+        purchasePayDetailDTO.setPay_time(concreteDataFormat.DateToString(date));
+        int newDetail = accountService.addPurchasePayDetail(purchasePayDetailDTO);
+        return Response.ok(new SimpleResponse(SimpleResponse.OK,Integer.toString(newDetail))).build();
+    }
+
+    @RequestMapping(value = "/purchase/pay/detail/allList", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getPurchasePayDetailAll() {
+        List<PurchasePayDetailDTO> purchasePayDetailDTOS = accountService.getPurchasePayDetailList();
+        return Response.ok(purchasePayDetailDTOS).build();
+    }
+
+    @RequestMapping(value = "/purchase/pay/detail/payList", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getPurchasePayDetailByPay(HttpServletRequest request) {
+        int payId = Integer.parseInt(request.getHeader("purchasePay_id"));
+        List<PurchasePayDetailDTO> purchasePayDetailDTOS = accountService.getPurchasePayDetailByPay(payId);
+        return Response.ok(purchasePayDetailDTOS).build();
     }
 }

@@ -13,7 +13,7 @@ public class PurchasePayDetail {
 
     private Integer userid;
 
-    private Integer savingsid;
+    private String savingsid;
 
     public Integer getId() {
         return id;
@@ -55,11 +55,11 @@ public class PurchasePayDetail {
         this.userid = userid;
     }
 
-    public Integer getSavingsid() {
+    public String getSavingsid() {
         return savingsid;
     }
 
-    public void setSavingsid(Integer savingsid) {
-        this.savingsid = savingsid;
+    public void setSavingsid(String savingsid) {
+        this.savingsid = savingsid == null ? null : savingsid.trim();
     }
 }

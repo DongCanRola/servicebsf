@@ -2,6 +2,7 @@ package cn.dcan.Service;
 
 import cn.dcan.dto.PurchaseDTO;
 import cn.dcan.dto.PurchasePayDTO;
+import cn.dcan.dto.PurchasePayDetailDTO;
 import cn.dcan.dto.SavingsDTO;
 import cn.dcan.entity.Savings;
 
@@ -14,6 +15,10 @@ public interface AccountService {
 
     List<SavingsDTO> getAllSavings();
     void addSavings(SavingsDTO savingsDTO);
+
     void addPurchasePay(PurchaseDTO purchaseDTO);
     List<PurchasePayDTO> getPurchasePayList();
+    int addPurchasePayDetail(PurchasePayDetailDTO purchasePayDetailDTO);
+    List<PurchasePayDetailDTO> getPurchasePayDetailList();
+    List<PurchasePayDetailDTO> getPurchasePayDetailByPay(int payId);
 }
