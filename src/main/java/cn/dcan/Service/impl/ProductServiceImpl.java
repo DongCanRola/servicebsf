@@ -20,8 +20,8 @@ public class ProductServiceImpl implements ProductService{
     ProductMapper productMapper;
 
     @Override
-    public List<ProductDTO> getProduct() {
-        List<Product> products = productMapper.selectAll();
+    public List<ProductDTO> getProduct(int state) {
+        List<Product> products = productMapper.selectByState(state);
         List<ProductDTO> productDTOS = new ArrayList<>();
         for(Product product : products) {
             productDTOS.add(entityToDto(product));
@@ -43,6 +43,7 @@ public class ProductServiceImpl implements ProductService{
         productDTO.setProduct_level(product.getLevel());
         productDTO.setProduct_color(product.getColor());
         productDTO.setProduct_style(product.getStyle());
+        productDTO.setProduct_state(product.getState());
         return productDTO;
     }
 
@@ -52,6 +53,7 @@ public class ProductServiceImpl implements ProductService{
         product.setLevel(productDTO.getProduct_level());
         product.setColor(productDTO.getProduct_color());
         product.setStyle(productDTO.getProduct_style());
+        product.setState(productDTO.getProduct_state());
         return product;
     }
 }

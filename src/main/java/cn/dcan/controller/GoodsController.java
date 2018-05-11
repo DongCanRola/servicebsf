@@ -41,8 +41,9 @@ public class GoodsController {
 
     @RequestMapping(value = "/goods/product/list", method = RequestMethod.GET)
     @ResponseBody
-    public Response getProductList() {
-        List<ProductDTO> productDTOS = productService.getProduct();
+    public Response getProductList(HttpServletRequest request) {
+        int state = Integer.parseInt(request.getHeader("productState"));
+        List<ProductDTO> productDTOS = productService.getProduct(state);
         return Response.ok(productDTOS).build();
     }
 

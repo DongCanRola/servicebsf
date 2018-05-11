@@ -11,6 +11,8 @@ public class Product {
 
     private String style;
 
+    private Integer state;
+
     public Integer getId() {
         return id;
     }
@@ -49,5 +51,13 @@ public class Product {
 
     public void setStyle(String style) {
         this.style = style == null ? null : style.trim();
+    }
+
+    public Integer getState() {
+        return state;
+    }
+    
+    public void setState(Integer state) {
+        this.state = state;
     }
 }

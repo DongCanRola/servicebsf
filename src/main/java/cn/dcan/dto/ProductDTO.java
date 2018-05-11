@@ -10,6 +10,7 @@ public class ProductDTO {
     private String product_level;
     private String product_color;
     private String product_style;
+    private int product_state;
 
     public void setProduct_id(int id) {
         this.product_id = id;
@@ -44,5 +45,12 @@ public class ProductDTO {
     }
     public String getProduct_style() {
         return this.product_style;
+    }
+
+    public void setProduct_state(int state) {
+        this.product_state = state;
+    }
+    public int getProduct_state() {
+        return this.product_state;
     }
 }

@@ -23,9 +23,9 @@
   </delete>
   <insert id="insert" parameterType="cn.dcan.entity.Product" >
     insert into product (id, name, level, 
-      color, style)
+      color, style, state)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, 
-      #{color,jdbcType=VARCHAR}, #{style,jdbcType=VARCHAR})
+      #{color,jdbcType=VARCHAR}, #{style,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" useGeneratedKeys="true" parameterType="cn.dcan.entity.Product" >
     insert into product
@@ -45,6 +45,9 @@
       <if test="style != null" >
         style,
       </if>
+      <if test="state != null">
+        state,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -61,6 +64,9 @@
       </if>
       <if test="style != null" >
         #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
       </if>
     </trim>
     <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
@@ -82,6 +88,9 @@
       <if test="style != null" >
         style = #{style,jdbcType=VARCHAR},
       </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -90,12 +99,19 @@
     set name = #{name,jdbcType=VARCHAR},
       level = #{level,jdbcType=VARCHAR},
       color = #{color,jdbcType=VARCHAR},
-      style = #{style,jdbcType=VARCHAR}
+      style = #{style,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectAll" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from product
+  </select>
+  <select id="selectByState" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from product
+    where state = #{state,jdbcType=INTEGER}
   </select>
 </mapper>
