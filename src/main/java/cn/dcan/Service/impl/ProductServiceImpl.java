@@ -36,6 +36,15 @@ public class ProductServiceImpl implements ProductService{
         return product.getId();
     }
 
+    @Override
+    public void updateProduct(ProductDTO productDTO) {
+        Product product = dtoToEntity(productDTO);
+        System.out.println("product state:" + product.getState());
+        System.out.println("product id: " + product.getId());
+        productMapper.updateByPrimaryKeySelective(product);
+        //System.out.println("update result: " + result);
+    }
+
     private ProductDTO entityToDto(Product product) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setProduct_id(product.getId());
@@ -43,17 +52,24 @@ public class ProductServiceImpl implements ProductService{
         productDTO.setProduct_level(product.getLevel());
         productDTO.setProduct_color(product.getColor());
         productDTO.setProduct_style(product.getStyle());
-        productDTO.setProduct_state(product.getState());
+        if(product.getState() != null) {
+            productDTO.setProduct_state(product.getState());
+        }
         return productDTO;
     }
 
     private Product dtoToEntity(ProductDTO productDTO) {
         Product product = new Product();
+        if(productDTO.getProduct_id() != 0) {
+            product.setId(productDTO.getProduct_id());
+        }
         product.setName(productDTO.getProduct_name());
         product.setLevel(productDTO.getProduct_level());
         product.setColor(productDTO.getProduct_color());
         product.setStyle(productDTO.getProduct_style());
-        product.setState(productDTO.getProduct_state());
+        if(productDTO.getProduct_state() != 0) {
+            product.setState(productDTO.getProduct_state());
+        }
         return product;
     }
 }

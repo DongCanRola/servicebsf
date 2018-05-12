@@ -7,9 +7,10 @@
     <result column="level" property="level" jdbcType="VARCHAR" />
     <result column="color" property="color" jdbcType="VARCHAR" />
     <result column="style" property="style" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, level, color, style
+    id, name, level, color, style, state
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -23,9 +24,11 @@
   </delete>
   <insert id="insert" parameterType="cn.dcan.entity.Product" >
     insert into product (id, name, level, 
-      color, style, state)
+      color, style, state
+      )
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, 
-      #{color,jdbcType=VARCHAR}, #{style,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER})
+      #{color,jdbcType=VARCHAR}, #{style,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" useGeneratedKeys="true" parameterType="cn.dcan.entity.Product" >
     insert into product
@@ -45,7 +48,7 @@
       <if test="style != null" >
         style,
       </if>
-      <if test="state != null">
+      <if test="state != null" >
         state,
       </if>
     </trim>
@@ -65,7 +68,7 @@
       <if test="style != null" >
         #{style,jdbcType=VARCHAR},
       </if>
-      <if test="state != null">
+      <if test="state != null" >
         #{state,jdbcType=INTEGER},
       </if>
     </trim>
@@ -88,7 +91,7 @@
       <if test="style != null" >
         style = #{style,jdbcType=VARCHAR},
       </if>
-      <if test="state != null">
+      <if test="state != null" >
         state = #{state,jdbcType=INTEGER},
       </if>
     </set>
@@ -103,11 +106,6 @@
       state = #{state,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from product
-  </select>
   <select id="selectByState" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

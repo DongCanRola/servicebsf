@@ -50,7 +50,16 @@ public class GoodsController {
     @RequestMapping(value = "/goods/product/add", method = RequestMethod.POST)
     @ResponseBody
     public Response addProduct(@RequestBody ProductDTO productDTO) {
+        System.out.println("add product state: " + productDTO.getProduct_state());
         int newProduct = productService.addProduct(productDTO);
         return Response.ok(new SimpleResponse(SimpleResponse.OK,Integer.toString(newProduct))).build();
+    }
+
+    @RequestMapping(value = "/goods/product/update", method = RequestMethod.PUT)
+    @ResponseBody
+    public Response ensureProduct(@RequestBody ProductDTO productDTO) {
+        System.out.println("change state to:"+ productDTO.getProduct_state());
+        productService.updateProduct(productDTO);
+        return Response.ok(new SimpleResponse(SimpleResponse.OK, "确认成功！")).build();
     }
 }

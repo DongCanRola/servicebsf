@@ -41,4 +41,16 @@ public class SaleController {
         }
         return Response.ok(new SimpleResponse(SimpleResponse.ERROR,"增加失败！")).build();
     }
+
+    @RequestMapping(value = "/sale/order/update", method = RequestMethod.PUT)
+    @ResponseBody
+    public Response updateSaleOrder(@RequestBody SaleDTO saleDTO) {
+        int currentState = saleDTO.getSale_state();
+        if(currentState == 4 || currentState == 8 || currentState == 11) {
+            Date date = new Date();
+            saleDTO.setSale_orderTime(concreteDataFormat.DateToString(date));
+        }
+        saleService.updateOrder(saleDTO);
+        return Response.ok(new SimpleResponse(SimpleResponse.OK,"状态更改成功！")).build();
+    }
 }

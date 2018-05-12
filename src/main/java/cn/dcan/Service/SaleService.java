@@ -12,4 +12,6 @@ public interface SaleService {
     List<SaleDTO> getOrdersByState(int state);
 
     int addOrder(SaleDTO saleDTO);
+
+    void updateOrder(SaleDTO saleDTO);
 }

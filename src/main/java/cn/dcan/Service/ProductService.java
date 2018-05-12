@@ -12,4 +12,6 @@ public interface ProductService {
     List<ProductDTO> getProduct(int state);
 
     int addProduct(ProductDTO productDTO);
+
+    void updateProduct(ProductDTO productDTO);
 }

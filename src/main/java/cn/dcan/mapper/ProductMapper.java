@@ -17,7 +17,5 @@ public interface ProductMapper {
 
     int updateByPrimaryKey(Product record);
 
-    List<Product> selectAll();
-
     List<Product> selectByState(Integer state);
 }

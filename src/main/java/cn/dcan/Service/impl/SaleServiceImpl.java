@@ -39,6 +39,13 @@ public class SaleServiceImpl implements SaleService{
         return saleOrder.getId();
     }
 
+    @Override
+    public void updateOrder(SaleDTO saleDTO) {
+        SaleOrder saleOrder = saleDtoToEntity(saleDTO);
+        int result = saleOrderMapper.updateByPrimaryKeySelective(saleOrder);
+        System.out.println("update sale order result: " + result);
+    }
+
     private SaleOrder saleDtoToEntity(SaleDTO saleDTO) {
         SaleOrder saleOrder = new SaleOrder();
         saleOrder.setProductid(saleDTO.getSale_productId());
@@ -51,14 +58,16 @@ public class SaleServiceImpl implements SaleService{
         if(saleDTO.getSale_price() != 0.0) {
             saleOrder.setPrice(saleDTO.getSale_price());
         }
-        if(saleDTO.getSale_consumerId() != 0.0) {
+        if(saleDTO.getSale_consumerId() != 0) {
             saleOrder.setConsumerid(saleDTO.getSale_consumerId());
         }
         if(saleDTO.getSale_state() != 0) {
             saleOrder.setState(saleDTO.getSale_state());
         }
         saleOrder.setOrdertime(concreteDataFormat.StringToDate(saleDTO.getSale_orderTime()));
-        saleOrder.setUserid(saleDTO.getSale_user());
+        if(saleDTO.getSale_user() != 0) {
+            saleOrder.setUserid(saleDTO.getSale_user());
+        }
         return saleOrder;
     }
 
@@ -66,13 +75,25 @@ public class SaleServiceImpl implements SaleService{
         SaleDTO saleDTO = new SaleDTO();
         saleDTO.setSale_orderId(saleOrder.getId());
         saleDTO.setSale_productId(saleOrder.getProductid());
-        saleDTO.setSale_num(saleOrder.getNum());
-        saleDTO.setSale_cost(saleOrder.getCost());
-        saleDTO.setSale_price(saleOrder.getPrice());
-        saleDTO.setSale_consumerId(saleOrder.getConsumerid());
-        saleDTO.setSale_state(saleOrder.getState());
+        if(saleOrder.getNum() != null) {
+            saleDTO.setSale_num(saleOrder.getNum());
+        }
+        if(saleOrder.getCost() != null) {
+            saleDTO.setSale_cost(saleOrder.getCost());
+        }
+        if(saleOrder.getPrice() != null) {
+            saleDTO.setSale_price(saleOrder.getPrice());
+        }
+        if(saleOrder.getConsumerid() != null) {
+            saleDTO.setSale_consumerId(saleOrder.getConsumerid());
+        }
+        if(saleOrder.getState() != null) {
+            saleDTO.setSale_state(saleOrder.getState());
+        }
         saleDTO.setSale_orderTime(concreteDataFormat.DateToString(saleOrder.getOrdertime()));
-        saleDTO.setSale_user(saleOrder.getUserid());
+        if(saleOrder.getUserid() != null) {
+            saleDTO.setSale_user(saleOrder.getUserid());
+        }
         return saleDTO;
     }
 }
