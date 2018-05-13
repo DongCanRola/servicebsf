@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dcan.mapper.SaleGatherDetailMapper" >
+  <resultMap id="BaseResultMap" type="cn.dcan.entity.SaleGatherDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="gatherid" property="gatherid" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="DOUBLE" />
+    <result column="gathertime" property="gathertime" jdbcType="TIMESTAMP" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="savingsid" property="savingsid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, gatherid, money, gathertime, userid, savingsid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from salegatherdetail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from salegatherdetail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.dcan.entity.SaleGatherDetail" >
+    insert into salegatherdetail (id, gatherid, money, 
+      gathertime, userid, savingsid
+      )
+    values (#{id,jdbcType=INTEGER}, #{gatherid,jdbcType=INTEGER}, #{money,jdbcType=DOUBLE}, 
+      #{gathertime,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER}, #{savingsid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.dcan.entity.SaleGatherDetail" >
+    insert into salegatherdetail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="gatherid != null" >
+        gatherid,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="gathertime != null" >
+        gathertime,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="savingsid != null" >
+        savingsid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gatherid != null" >
+        #{gatherid,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="gathertime != null" >
+        #{gathertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="savingsid != null" >
+        #{savingsid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.dcan.entity.SaleGatherDetail" >
+    update salegatherdetail
+    <set >
+      <if test="gatherid != null" >
+        gatherid = #{gatherid,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="gathertime != null" >
+        gathertime = #{gathertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="savingsid != null" >
+        savingsid = #{savingsid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.dcan.entity.SaleGatherDetail" >
+    update salegatherdetail
+    set gatherid = #{gatherid,jdbcType=INTEGER},
+      money = #{money,jdbcType=DOUBLE},
+      gathertime = #{gathertime,jdbcType=TIMESTAMP},
+      userid = #{userid,jdbcType=INTEGER},
+      savingsid = #{savingsid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

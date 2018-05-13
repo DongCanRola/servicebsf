@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dcan.mapper.SaleGatherMapper" >
+  <resultMap id="BaseResultMap" type="cn.dcan.entity.SaleGather" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="saleid" property="saleid" jdbcType="INTEGER" />
+    <result column="plantotal" property="plantotal" jdbcType="DOUBLE" />
+    <result column="actualtotal" property="actualtotal" jdbcType="DOUBLE" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, saleid, plantotal, actualtotal, discount
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from salegather
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from salegather
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.dcan.entity.SaleGather" >
+    insert into salegather (id, saleid, plantotal, 
+      actualtotal, discount)
+    values (#{id,jdbcType=INTEGER}, #{saleid,jdbcType=INTEGER}, #{plantotal,jdbcType=DOUBLE}, 
+      #{actualtotal,jdbcType=DOUBLE}, #{discount,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.dcan.entity.SaleGather" >
+    insert into salegather
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="saleid != null" >
+        saleid,
+      </if>
+      <if test="plantotal != null" >
+        plantotal,
+      </if>
+      <if test="actualtotal != null" >
+        actualtotal,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="saleid != null" >
+        #{saleid,jdbcType=INTEGER},
+      </if>
+      <if test="plantotal != null" >
+        #{plantotal,jdbcType=DOUBLE},
+      </if>
+      <if test="actualtotal != null" >
+        #{actualtotal,jdbcType=DOUBLE},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.dcan.entity.SaleGather" >
+    update salegather
+    <set >
+      <if test="saleid != null" >
+        saleid = #{saleid,jdbcType=INTEGER},
+      </if>
+      <if test="plantotal != null" >
+        plantotal = #{plantotal,jdbcType=DOUBLE},
+      </if>
+      <if test="actualtotal != null" >
+        actualtotal = #{actualtotal,jdbcType=DOUBLE},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.dcan.entity.SaleGather" >
+    update salegather
+    set saleid = #{saleid,jdbcType=INTEGER},
+      plantotal = #{plantotal,jdbcType=DOUBLE},
+      actualtotal = #{actualtotal,jdbcType=DOUBLE},
+      discount = #{discount,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

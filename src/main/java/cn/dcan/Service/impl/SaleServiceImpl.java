@@ -2,7 +2,9 @@ package cn.dcan.Service.impl;
 
 import cn.dcan.Service.SaleService;
 import cn.dcan.dto.SaleDTO;
+import cn.dcan.entity.Process;
 import cn.dcan.entity.SaleOrder;
+import cn.dcan.mapper.ProcessMapper;
 import cn.dcan.mapper.SaleOrderMapper;
 import cn.dcan.constrain.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ public class SaleServiceImpl implements SaleService{
 
     @Autowired
     SaleOrderMapper saleOrderMapper;
+    @Autowired
+    ProcessMapper processMapper;
 
     private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
@@ -43,6 +47,11 @@ public class SaleServiceImpl implements SaleService{
     public void updateOrder(SaleDTO saleDTO) {
         SaleOrder saleOrder = saleDtoToEntity(saleDTO);
         int result = saleOrderMapper.updateByPrimaryKeySelective(saleOrder);
+        if(saleDTO.getSale_state() == 4) {
+            Process process = processMapper.selectBySaleOrder(saleDTO.getSale_orderId());
+            process.setState(6);
+            processMapper.updateByPrimaryKeySelective(process);
+        }
         System.out.println("update sale order result: " + result);
     }
 

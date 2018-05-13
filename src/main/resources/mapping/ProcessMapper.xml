@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dcan.mapper.ProcessMapper" >
+  <resultMap id="BaseResultMap" type="cn.dcan.entity.Process" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="saleid" property="saleid" jdbcType="INTEGER" />
+    <result column="sampleid" property="sampleid" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="user" property="user" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, saleid, sampleid, state, user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from process
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from process
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.dcan.entity.Process" >
+    insert into process (id, saleid, sampleid, 
+      state, user)
+    values (#{id,jdbcType=INTEGER}, #{saleid,jdbcType=INTEGER}, #{sampleid,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER}, #{user,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" parameterType="cn.dcan.entity.Process" >
+    insert into process
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="saleid != null" >
+        saleid,
+      </if>
+      <if test="sampleid != null" >
+        sampleid,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="user != null" >
+        user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="saleid != null" >
+        #{saleid,jdbcType=INTEGER},
+      </if>
+      <if test="sampleid != null" >
+        #{sampleid,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="user != null" >
+        #{user,jdbcType=INTEGER},
+      </if>
+    </trim>
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.dcan.entity.Process" >
+    update process
+    <set >
+      <if test="saleid != null" >
+        saleid = #{saleid,jdbcType=INTEGER},
+      </if>
+      <if test="sampleid != null" >
+        sampleid = #{sampleid,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="user != null" >
+        user = #{user,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.dcan.entity.Process" >
+    update process
+    set saleid = #{saleid,jdbcType=INTEGER},
+      sampleid = #{sampleid,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      user = #{user,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectAll">
+    select
+    <include refid="Base_Column_List" />
+    from process
+  </select>
+  <select id="selectBySaleOrder">
+    select
+    <include refid="Base_Column_List" />
+    from process
+    where saleid = #{saleid,jdbcType=INTEGER}
+  </select>
+</mapper>
