@@ -48,6 +48,9 @@ public class SaleServiceImpl implements SaleService{
 
     private SaleOrder saleDtoToEntity(SaleDTO saleDTO) {
         SaleOrder saleOrder = new SaleOrder();
+        if(saleDTO.getSale_orderId() != 0) {
+            saleOrder.setId(saleDTO.getSale_orderId());
+        }
         saleOrder.setProductid(saleDTO.getSale_productId());
         if(saleDTO.getSale_num() != 0) {
             saleOrder.setNum(saleDTO.getSale_num());
