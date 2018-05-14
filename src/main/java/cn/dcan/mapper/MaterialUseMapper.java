@@ -2,6 +2,8 @@ package cn.dcan.mapper;
 
 import cn.dcan.entity.MaterialUse;
 
+import java.util.List;
+
 public interface MaterialUseMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,7 @@ public interface MaterialUseMapper {
     int updateByPrimaryKeySelective(MaterialUse record);
 
     int updateByPrimaryKey(MaterialUse record);
+
+    List<MaterialUse> selectByProcessOrder(Integer processorderid);
+    List<MaterialUse> selectByPurchaseStore(Integer purchasestoreid);
 }

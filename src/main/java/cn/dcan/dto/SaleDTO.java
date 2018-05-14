@@ -18,6 +18,8 @@ public class SaleDTO {
     private String sale_orderTime;
     private int sale_user;
 
+    private int store_remaining;
+
     public void setSale_orderId(int id) {
         this.sale_orderId = id;
     }
@@ -104,5 +106,12 @@ public class SaleDTO {
     }
     public int getSale_user() {
         return this.sale_user;
+    }
+
+    public void setStore_remaining(int remaining) {
+        this.store_remaining = remaining;
+    }
+    public int getStore_remaining() {
+        return this.store_remaining;
     }
 }

@@ -8,6 +8,7 @@ public class GoodsDTO {
     private int goods_id;
     private int goods_type;
     private String goods_name;
+    private int goods_remaining;
 
     public void setGoods_id(int id) {
         this.goods_id = id;
@@ -28,5 +29,12 @@ public class GoodsDTO {
     }
     public String getGoods_name() {
         return this.goods_name;
+    }
+
+    public void setGoods_remaining(int remaining) {
+        this.goods_remaining = remaining;
+    }
+    public int getGoods_remaining() {
+        return this.goods_remaining;
     }
 }

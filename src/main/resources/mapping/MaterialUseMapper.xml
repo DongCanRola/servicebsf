@@ -30,7 +30,7 @@
       #{usenum,jdbcType=INTEGER}, #{usetime,jdbcType=TIMESTAMP}, #{user,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="cn.dcan.entity.MaterialUse" >
+  <insert id="insertSelective" useGeneratedKeys="true" parameterType="cn.dcan.entity.MaterialUse" >
     insert into materialuse
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -72,6 +72,9 @@
         #{user,jdbcType=INTEGER},
       </if>
     </trim>
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="cn.dcan.entity.MaterialUse" >
     update materialuse
@@ -103,4 +106,16 @@
       user = #{user,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectByProcessOrder">
+    select
+    <include refid="Base_Column_List" />
+    from materialuse
+    where processorderid = #{processorderid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPurchaseStore">
+    select
+    <include refid="Base_Column_List" />
+    from materialuse
+    where purchasestoreid = #{purchasestoreid,jdbcType=INTEGER}
+  </select>
 </mapper>

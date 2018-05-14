@@ -31,7 +31,7 @@
       #{innum,jdbcType=INTEGER}, #{remaining,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, 
       #{user,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="cn.dcan.entity.PurchaseStore" >
+  <insert id="insertSelective" useGeneratedKeys="true" parameterType="cn.dcan.entity.PurchaseStore" >
     insert into purchasestore
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -79,6 +79,9 @@
         #{user,jdbcType=INTEGER},
       </if>
     </trim>
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="cn.dcan.entity.PurchaseStore" >
     update purchasestore
@@ -114,4 +117,15 @@
       user = #{user,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from purchasestore
+  </select>
+  <select id="selectByPurchase" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from purchasestore
+    where purchaseid = #{purchaseid,jdbcType=INTEGER}
+  </select>
 </mapper>

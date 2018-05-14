@@ -122,4 +122,10 @@
     from purchaseorder
     where state = #{state,jdbcType=INTEGER}
   </select>
+  <select id="getOrdersByGoods" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from purchaseorder
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </select>
 </mapper>

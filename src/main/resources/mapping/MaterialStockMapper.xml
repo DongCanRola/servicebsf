@@ -68,4 +68,26 @@
     where warehouseid = #{warehouseid,jdbcType=INTEGER}
       and goodsid = #{goodsid,jdbcType=INTEGER}
   </update>
+  <select id="selectByWarehouse" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from materialstock
+    where warehouseid = #{warehouseid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByGoods" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from materialstock
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </select>
+  <select id="selectGoodsSum" resultMap="Map">
+    select goodsid, sum(num) as total
+    from materialstock
+    group by goodsid
+  </select>
+  <select id="selectNumOfGoods" resultType="java.lang.Integer">
+    select sum(num)
+    from materialstock
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </select>
 </mapper>

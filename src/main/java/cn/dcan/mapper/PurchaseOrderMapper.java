@@ -22,4 +22,6 @@ public interface PurchaseOrderMapper {
 
     //根据状态查询订单
     List<PurchaseOrder> getOrdersByState(Integer state);
+    //根据材料获取所有进货单
+    List<PurchaseOrder> getOrdersByGoods(Integer goodsid);
 }

@@ -1,14 +1,13 @@
 package cn.dcan.Service.impl;
 
 import cn.dcan.Service.ProcessService;
+import cn.dcan.constrain.ConcreteDataFormat;
 import cn.dcan.dto.ProcessDTO;
+import cn.dcan.dto.ProcessOrderDTO;
 import cn.dcan.dto.SampleDTO;
+import cn.dcan.entity.*;
 import cn.dcan.entity.Process;
-import cn.dcan.entity.SaleOrder;
-import cn.dcan.entity.Sample;
-import cn.dcan.mapper.ProcessMapper;
-import cn.dcan.mapper.SaleOrderMapper;
-import cn.dcan.mapper.SampleMapper;
+import cn.dcan.mapper.*;
 import org.apache.tomcat.jni.Proc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +27,12 @@ public class ProcessServiceImpl implements ProcessService{
     ProcessMapper processMapper;
     @Autowired
     SaleOrderMapper saleOrderMapper;
+    @Autowired
+    ProcessOrderMapper processOrderMapper;
+    @Autowired
+    MaterialUseMapper materialUseMapper;
+
+    private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
     @Override
     public int addSample(SampleDTO sampleDTO) {
@@ -86,6 +91,42 @@ public class ProcessServiceImpl implements ProcessService{
             saleOrderMapper.updateByPrimaryKeySelective(saleOrder);
         }
         return count;
+    }
+
+    @Override
+    public int addMaterialList(ProcessOrderDTO processOrderDTO) {
+        ProcessOrder processOrder = poDtoToEntity(processOrderDTO);
+        int count = processOrderMapper.insertSelective(processOrder);
+        return processOrder.getId();
+    }
+
+    @Override
+    public List<ProcessOrderDTO> getMaterialListByState(int state) {
+        List<ProcessOrder> processOrders = processOrderMapper.selectByState(state);
+        //List<ProcessOrderDTO> processOrderDTOS = ;
+        return calculateRemaining(processOrders);
+    }
+
+    @Override
+    public List<ProcessOrderDTO> getMaterialListByProcess(int processid) {
+        List<ProcessOrder> processOrders = processOrderMapper.selectByProcess(processid);
+        //List<ProcessOrderDTO> processOrderDTOS = calculateRemaining(processOrders);
+        return calculateRemaining(processOrders);
+    }
+
+    private List<ProcessOrderDTO> calculateRemaining(List<ProcessOrder> processOrders) {
+        List<ProcessOrderDTO> processOrderDTOS = new ArrayList<>();
+        for(ProcessOrder processOrder : processOrders) {
+            int processOrderId = processOrder.getId();
+            List<MaterialUse> materialUses = materialUseMapper.selectByProcessOrder(processOrderId);
+            int providedNum = 0;
+            for(MaterialUse materialUse : materialUses) {
+                providedNum = providedNum + materialUse.getUsenum();
+            }
+            int remaining = processOrder.getNum() - providedNum;
+            processOrderDTOS.add(poEntityToDto(processOrder, remaining));
+        }
+        return processOrderDTOS;
     }
 
     private Sample sampleDtoToEntity(SampleDTO sampleDTO) {
@@ -158,5 +199,37 @@ public class ProcessServiceImpl implements ProcessService{
         processDTO.setProcess_state(process.getState());
         processDTO.setProcess_userId(process.getUser());
         return processDTO;
+    }
+
+    private ProcessOrder poDtoToEntity(ProcessOrderDTO processOrderDTO) {
+        ProcessOrder processOrder = new ProcessOrder();
+        if(processOrderDTO.getList_id() != 0) {
+            processOrder.setId(processOrderDTO.getList_id());
+        }
+        if(processOrderDTO.getList_process() != 0) {
+            processOrder.setProcessid(processOrderDTO.getList_process());
+        }
+        if(processOrderDTO.getList_goods() != 0) {
+            processOrder.setGoodsid(processOrderDTO.getList_goods());
+        }
+        if(processOrderDTO.getList_total() != 0) {
+            processOrder.setNum(processOrderDTO.getList_total());
+        }
+        if(processOrderDTO.getList_state() != 0) {
+            processOrder.setState(processOrderDTO.getList_state());
+        }
+        processOrder.setPlantime(concreteDataFormat.StringToDate(processOrderDTO.getList_time()));
+        return processOrder;
+    }
+    private ProcessOrderDTO poEntityToDto(ProcessOrder processOrder, int remaining) {
+        ProcessOrderDTO processOrderDTO = new ProcessOrderDTO();
+        processOrderDTO.setList_id(processOrder.getId());
+        processOrderDTO.setList_process(processOrder.getProcessid());
+        processOrderDTO.setList_goods(processOrder.getGoodsid());
+        processOrderDTO.setList_total(processOrder.getNum());
+        processOrderDTO.setList_remaining(remaining);
+        processOrderDTO.setList_state(processOrder.getState());
+        processOrderDTO.setList_time(concreteDataFormat.DateToString(processOrder.getPlantime()));
+        return processOrderDTO;
     }
 }
