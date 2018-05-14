@@ -40,4 +40,8 @@ public interface WarehouseService {
     List<StockAlarmDTO> getAlarmByState(int state);
     int updateAlarm(StockAlarmDTO stockAlarmDTO);
 
+    int storeProduct(ProductStoreDTO productStoreDTO);
+    int sendProduct(ProductSendDTO productSendDTO);
+    List<ProductStoreDTO> getProductStoreBySale(int saleid);
+    List<ProductSendDTO> getProductSendBySale(int saleid);
 }

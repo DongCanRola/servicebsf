@@ -2,6 +2,8 @@ package cn.dcan.mapper;
 
 import cn.dcan.entity.StockAlarm;
 
+import java.util.List;
+
 public interface StockAlarmMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,8 @@ public interface StockAlarmMapper {
     int updateByPrimaryKeySelective(StockAlarm record);
 
     int updateByPrimaryKey(StockAlarm record);
+
+    List<StockAlarm> selectByState(Integer state);
+
+    int updateAlarmState(StockAlarm stockAlarm);
 }

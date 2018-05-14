@@ -20,4 +20,6 @@ public interface PurchasePayDetailMapper {
     List<PurchasePayDetail> selectAll();
 
     List<PurchasePayDetail> selectByPayId(Integer payid);
+
+    List<PurchasePayDetail> selectBySavingsId(String savingsid);
 }

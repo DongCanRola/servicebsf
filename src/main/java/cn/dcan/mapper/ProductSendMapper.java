@@ -2,6 +2,8 @@ package cn.dcan.mapper;
 
 import cn.dcan.entity.ProductSend;
 
+import java.util.List;
+
 public interface ProductSendMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,6 @@ public interface ProductSendMapper {
     int updateByPrimaryKeySelective(ProductSend record);
 
     int updateByPrimaryKey(ProductSend record);
+
+    List<ProductSend> selectByStore(Integer storeid);
 }

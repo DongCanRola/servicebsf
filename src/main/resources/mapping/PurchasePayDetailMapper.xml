@@ -117,4 +117,10 @@
     <include refid="Base_Column_List" />
     from purchasepaydetail
   </select>
+  <select id="selectBySavingsId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from purchasepaydetail
+    where savingsid = #{savingsid,jdbcType=VARCHAR}
+  </select>
 </mapper>

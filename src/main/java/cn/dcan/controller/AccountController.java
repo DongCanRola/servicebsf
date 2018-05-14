@@ -57,7 +57,9 @@ public class AccountController {
         Date date = new Date();
         purchasePayDetailDTO.setPay_time(concreteDataFormat.DateToString(date));
         int newDetail = accountService.addPurchasePayDetail(purchasePayDetailDTO);
-        return Response.ok(new SimpleResponse(SimpleResponse.OK,Integer.toString(newDetail))).build();
+        if(newDetail > 0)
+            return Response.ok(new SimpleResponse(SimpleResponse.OK,Integer.toString(newDetail))).build();
+        return Response.ok(new SimpleResponse(SimpleResponse.ERROR,"付款失败！")).build();
     }
 
     @RequestMapping(value = "/purchase/pay/detail/allList", method = RequestMethod.GET)

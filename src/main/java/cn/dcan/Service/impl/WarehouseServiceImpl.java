@@ -32,6 +32,12 @@ public class WarehouseServiceImpl implements WarehouseService{
     MaterialUseMapper materialUseMapper;
     @Autowired
     ProcessOrderMapper processOrderMapper;
+    @Autowired
+    StockAlarmMapper stockAlarmMapper;
+    @Autowired
+    ProductStoreMapper productStoreMapper;
+    @Autowired
+    ProductSendMapper productSendMapper;
 
     private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
@@ -219,6 +225,101 @@ public class WarehouseServiceImpl implements WarehouseService{
         return materialUseDTOS;
     }
 
+    @Override
+    public int addAlarm(StockAlarmDTO stockAlarmDTO) {
+        StockAlarm stockAlarm = saDtoToEntity(stockAlarmDTO);
+        int count = stockAlarmMapper.insertSelective(stockAlarm);
+        return stockAlarm.getId();
+    }
+
+    @Override
+    public List<StockAlarmDTO> getAlarmByState(int state) {
+        List<StockAlarm> stockAlarms = stockAlarmMapper.selectByState(state);
+        List<StockAlarmDTO> stockAlarmDTOS = new ArrayList<>();
+        for(StockAlarm stockAlarm : stockAlarms) {
+            stockAlarmDTOS.add(saEntityToDto(stockAlarm));
+        }
+        return stockAlarmDTOS;
+    }
+
+    @Override
+    public int updateAlarm(StockAlarmDTO stockAlarmDTO) {
+        StockAlarm stockAlarm = saDtoToEntity(stockAlarmDTO);
+        return stockAlarmMapper.updateAlarmState(stockAlarm);
+    }
+
+    @Override
+    public int storeProduct(ProductStoreDTO productStoreDTO) {
+        ProductStore productStore = proStoreDtoToEntity(productStoreDTO);
+        //判断仓库空间是否足够
+        int num = productStore.getInnum();
+        int warehouseId = productStore.getWarehouseid();
+        Warehouse warehouse = warehouseMapper.selectByPrimaryKey(warehouseId);
+        double beforeSpare = warehouse.getSpare();
+        if(beforeSpare < (double)num) {
+            return -1;
+        } else {
+            int count = productStoreMapper.insertSelective(productStore);
+            //更新仓库空闲空间
+            double spare = warehouse.getSpare() - num;
+            warehouse.setSpare(spare);
+            warehouseMapper.updateByPrimaryKey(warehouse);
+        }
+
+        return productStore.getId();
+    }
+
+    @Override
+    public int sendProduct(ProductSendDTO productSendDTO) {
+        ProductSend productSend = proSendDtoToEntity(productSendDTO);
+        //判断出库量是否不超过存储剩余
+        int outNum = productSend.getOutnum();
+        int storeId = productSend.getStoreid();
+        ProductStore productStore = productStoreMapper.selectByPrimaryKey(storeId);
+        int storeRemaining = productStore.getRemaining();
+        if(outNum > storeRemaining) {
+            return -1;
+        }else {
+            int count = productSendMapper.insertSelective(productSend);
+            //更新存储剩余
+            int currentRemaining = storeRemaining - outNum;
+            productStore.setRemaining(currentRemaining);
+            productStoreMapper.updateByPrimaryKey(productStore);
+            //更新仓库空闲
+            int warehouseId = productStore.getWarehouseid();
+            Warehouse warehouse = warehouseMapper.selectByPrimaryKey(warehouseId);
+            double spare = warehouse.getSpare() + outNum;
+            warehouse.setSpare(spare);
+            warehouseMapper.updateByPrimaryKey(warehouse);
+        }
+
+        return productSend.getId();
+    }
+
+    @Override
+    public List<ProductStoreDTO> getProductStoreBySale(int saleid) {
+        List<ProductStore> productStores = productStoreMapper.selectBySale(saleid);
+        List<ProductStoreDTO> productStoreDTOS = new ArrayList<>();
+        for(ProductStore productStore : productStores) {
+            productStoreDTOS.add(proStoreEntityToDto(productStore));
+        }
+        return productStoreDTOS;
+    }
+
+    @Override
+    public List<ProductSendDTO> getProductSendBySale(int saleid) {
+        List<ProductStore> productStores = productStoreMapper.selectBySale(saleid);
+        List<ProductSendDTO> productSendDTOS = new ArrayList<>();
+        for(ProductStore productStore : productStores) {
+            int storeId = productStore.getId();
+            List<ProductSend> productSends = productSendMapper.selectByStore(storeId);
+            for(ProductSend productSend : productSends) {
+                productSendDTOS.add(proSendEntityToDto(productSend));
+            }
+        }
+        return productSendDTOS;
+    }
+
     private Warehouse dtoToEntity(WarehouseDTO warehouseDTO) {
         Warehouse warehouse = new Warehouse();
         warehouse.setName(warehouseDTO.getWarehouse_name());
@@ -308,5 +409,90 @@ public class WarehouseServiceImpl implements WarehouseService{
         materialUseDTO.setUse_time(concreteDataFormat.DateToString(materialUse.getUsetime()));
         materialUseDTO.setUse_user(materialUse.getUser());
         return materialUseDTO;
+    }
+
+    private StockAlarm saDtoToEntity(StockAlarmDTO stockAlarmDTO) {
+        StockAlarm stockAlarm = new StockAlarm();
+        if(stockAlarmDTO.getAlarm_id() != 0) {
+            stockAlarm.setId(stockAlarmDTO.getAlarm_id());
+        }
+        if(stockAlarmDTO.getAlarm_goods() != 0) {
+            stockAlarm.setGoodsid(stockAlarmDTO.getAlarm_goods());
+        }
+        stockAlarm.setCurrent(stockAlarmDTO.getAlarm_current());
+        if(stockAlarmDTO.getAlarm_required() != 0) {
+            stockAlarm.setRequired(stockAlarmDTO.getAlarm_required());
+        }
+        stockAlarm.setAlarmtime(concreteDataFormat.StringToDate(stockAlarmDTO.getAlarm_time()));
+        if(stockAlarmDTO.getAlarm_user() != 0) {
+            stockAlarm.setUser(stockAlarmDTO.getAlarm_user());
+        }
+        if(stockAlarmDTO.getAlarm_state() != 0) {
+            stockAlarm.setState(stockAlarmDTO.getAlarm_state());
+        }
+        return stockAlarm;
+    }
+    private StockAlarmDTO saEntityToDto(StockAlarm stockAlarm) {
+        StockAlarmDTO stockAlarmDTO = new StockAlarmDTO();
+        stockAlarmDTO.setAlarm_id(stockAlarm.getId());
+        stockAlarmDTO.setAlarm_goods(stockAlarm.getGoodsid());
+        stockAlarmDTO.setAlarm_current(stockAlarm.getCurrent());
+        stockAlarmDTO.setAlarm_required(stockAlarm.getRequired());
+        stockAlarmDTO.setAlarm_time(concreteDataFormat.DateToString(stockAlarm.getAlarmtime()));
+        stockAlarmDTO.setAlarm_user(stockAlarm.getUser());
+        stockAlarmDTO.setAlarm_state(stockAlarm.getState());
+        return stockAlarmDTO;
+    }
+
+    private ProductStore proStoreDtoToEntity(ProductStoreDTO productStoreDTO) {
+        ProductStore productStore = new ProductStore();
+        if(productStoreDTO.getStore_id() != 0) {
+            productStore.setId(productStoreDTO.getStore_id());
+        }
+        if(productStoreDTO.getStore_saleId() != 0) {
+            productStore.setSaleid(productStoreDTO.getStore_saleId());
+        }
+        if(productStoreDTO.getStore_warehouseId() != 0) {
+            productStore.setWarehouseid(productStoreDTO.getStore_warehouseId());
+        }
+        productStore.setInnum(productStoreDTO.getStore_num());
+        productStore.setRemaining(productStoreDTO.getStore_remaining());
+        productStore.setIntime(concreteDataFormat.StringToDate(productStoreDTO.getStore_time()));
+        if(productStoreDTO.getStore_user() != 0) {
+            productStore.setUser(productStoreDTO.getStore_user());
+        }
+        return productStore;
+    }
+    private ProductStoreDTO proStoreEntityToDto(ProductStore productStore) {
+        ProductStoreDTO productStoreDTO = new ProductStoreDTO();
+        productStoreDTO.setStore_id(productStore.getId());
+        productStoreDTO.setStore_saleId(productStore.getSaleid());
+        productStoreDTO.setStore_warehouseId(productStore.getWarehouseid());
+        productStoreDTO.setStore_num(productStore.getInnum());
+        productStoreDTO.setStore_remaining(productStore.getRemaining());
+        productStoreDTO.setStore_time(concreteDataFormat.DateToString(productStore.getIntime()));
+        productStoreDTO.setStore_user(productStore.getUser());
+        return productStoreDTO;
+    }
+
+    private ProductSend proSendDtoToEntity(ProductSendDTO productSendDTO) {
+        ProductSend productSend = new ProductSend();
+        if(productSendDTO.getSend_id() != 0) {
+            productSend.setId(productSendDTO.getSend_id());
+        }
+        productSend.setStoreid(productSendDTO.getSend_storeId());
+        productSend.setOutnum(productSendDTO.getSend_num());
+        productSend.setOuttime(concreteDataFormat.StringToDate(productSendDTO.getSend_time()));
+        productSend.setUser(productSendDTO.getSend_user());
+        return productSend;
+    }
+    private ProductSendDTO proSendEntityToDto(ProductSend productSend) {
+        ProductSendDTO productSendDTO = new ProductSendDTO();
+        productSendDTO.setSend_id(productSend.getId());
+        productSendDTO.setSend_storeId(productSend.getStoreid());
+        productSendDTO.setSend_num(productSend.getOutnum());
+        productSendDTO.setSend_time(concreteDataFormat.DateToString(productSend.getOuttime()));
+        productSendDTO.setSend_user(productSend.getUser());
+        return productSendDTO;
     }
 }

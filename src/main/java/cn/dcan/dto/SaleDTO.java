@@ -19,6 +19,7 @@ public class SaleDTO {
     private int sale_user;
 
     private int store_remaining;
+    private double sale_discount;
 
     public void setSale_orderId(int id) {
         this.sale_orderId = id;
@@ -113,5 +114,12 @@ public class SaleDTO {
     }
     public int getStore_remaining() {
         return this.store_remaining;
+    }
+
+    public void setSale_discount(double discount) {
+        this.sale_discount = discount;
+    }
+    public double getSale_discount() {
+        return this.sale_discount;
     }
 }

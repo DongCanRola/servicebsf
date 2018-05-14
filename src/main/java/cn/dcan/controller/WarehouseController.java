@@ -4,7 +4,6 @@ import cn.dcan.Service.WarehouseService;
 import cn.dcan.constrain.*;
 
 import cn.dcan.dto.*;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -143,5 +142,72 @@ public class WarehouseController {
         int purchaseStoreId = Integer.parseInt(request.getHeader("purchaseStoreId"));
         List<MaterialUseDTO> materialUseDTOS = warehouseService.getMaterialUseByStore(purchaseStoreId);
         return Response.ok(materialUseDTOS).build();
+    }
+
+    @RequestMapping(value = "/warehouse/alarm/add", method = RequestMethod.POST)
+    @ResponseBody
+    public Response addAlarm(@RequestBody StockAlarmDTO stockAlarmDTO) {
+        Date date = new Date();
+        stockAlarmDTO.setAlarm_time(concreteDataFormat.DateToString(date));
+        int newAlarm = warehouseService.addAlarm(stockAlarmDTO);
+        if(newAlarm > 0)
+            return Response.ok(new SimpleResponse(SimpleResponse.OK, Integer.toString(newAlarm))).build();
+        return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "添加报警失败!")).build();
+    }
+
+    @RequestMapping(value = "/warehouse/alarm/stateList", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getAlarmByState(HttpServletRequest request) {
+        int state = Integer.parseInt(request.getHeader("alarm_state"));
+        List<StockAlarmDTO> stockAlarmDTOS = warehouseService.getAlarmByState(state);
+        return Response.ok(stockAlarmDTOS).build();
+    }
+
+    @RequestMapping(value = "/warehouse/alarm/updateState", method = RequestMethod.PUT)
+    @ResponseBody
+    public Response updateAlarm(@RequestBody StockAlarmDTO stockAlarmDTO) {
+        int result = warehouseService.updateAlarm(stockAlarmDTO);
+        if(result > 0)
+            return Response.ok(new SimpleResponse(SimpleResponse.OK, "更新成功!")).build();
+        return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "更新失败！")).build();
+    }
+
+    @RequestMapping(value = "/warehouse/product/store", method = RequestMethod.POST)
+    @ResponseBody
+    public Response storeProduct(@RequestBody ProductStoreDTO productStoreDTO) {
+        Date date = new Date();
+        productStoreDTO.setStore_time(concreteDataFormat.DateToString(date));
+        int newStoreProduct = warehouseService.storeProduct(productStoreDTO);
+        if(newStoreProduct > 0)
+            return Response.ok(new SimpleResponse(SimpleResponse.OK, Integer.toString(newStoreProduct))).build();
+        return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "存储成品失败！")).build();
+    }
+
+    @RequestMapping(value = "/warehouse/product/send", method = RequestMethod.POST)
+    @ResponseBody
+    public Response sendProduct(@RequestBody ProductSendDTO productSendDTO) {
+        Date date = new Date();
+        productSendDTO.setSend_time(concreteDataFormat.DateToString(date));
+        int newSendProduct = warehouseService.sendProduct(productSendDTO);
+        if(newSendProduct > 0)
+            return Response.ok(new SimpleResponse(SimpleResponse.OK, Integer.toString(newSendProduct))).build();
+        return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "发送成品失败！")).build();
+    }
+
+
+    @RequestMapping(value = "/warehouse/product/storeListSale", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getProductStoreBySales(HttpServletRequest request) {
+        int saleId = Integer.parseInt(request.getHeader("sale_id"));
+        List<ProductStoreDTO> productStoreDTOS = warehouseService.getProductStoreBySale(saleId);
+        return Response.ok(productStoreDTOS).build();
+    }
+
+    @RequestMapping(value = "/warehouse/product/sendListSale", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getProductSendBySale(HttpServletRequest request) {
+        int saleId = Integer.parseInt(request.getHeader("sale_id"));
+        List<ProductSendDTO> productSendDTOS = warehouseService.getProductSendBySale(saleId);
+        return Response.ok(productSendDTOS).build();
     }
 }
