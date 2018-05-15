@@ -3,6 +3,7 @@ package cn.dcan.Service.impl;
 import cn.dcan.Service.WarehouseService;
 import cn.dcan.dto.*;
 import cn.dcan.entity.*;
+import cn.dcan.entity.Process;
 import cn.dcan.mapper.*;
 import cn.dcan.constrain.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class WarehouseServiceImpl implements WarehouseService{
     ProductStoreMapper productStoreMapper;
     @Autowired
     ProductSendMapper productSendMapper;
+    @Autowired
+    ProcessMapper processMapper;
 
     private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
@@ -233,6 +236,21 @@ public class WarehouseServiceImpl implements WarehouseService{
                 if(upToNowTotal == processOrder.getNum()) {
                     processOrder.setState(2);
                     processOrderMapper.updateByPrimaryKey(processOrder);
+                    //更新加工处理状态
+                    int processId = processOrder.getProcessid();
+                    List<ProcessOrder> processOrderList = processOrderMapper.selectByProcess(processId);
+                    boolean completeOrNot = true;
+                    for(ProcessOrder po : processOrderList) {
+                        if(po.getState() != 2) {
+                            completeOrNot = false;
+                            break;
+                        }
+                    }
+                    if(completeOrNot) {
+                        Process process = processMapper.selectByPrimaryKey(processId);
+                        process.setState(3);
+                        processMapper.updateByPrimaryKey(process);
+                    }
                 }
             }
         }

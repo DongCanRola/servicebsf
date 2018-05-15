@@ -15,6 +15,7 @@ public interface ProcessService {
     int addSample(SampleDTO sampleDTO);
     //获取某一成品的所有样本信息
     List<SampleDTO> getSampleByProduct(int productid);
+
     //增加加工处理
     int addProcess(ProcessDTO processDTO);
     //获取所有加工处理信息
