@@ -17,6 +17,8 @@ public class PurchaseDTO {
     private int purchaseReturn_num;
     private double purchase_discount;
 
+    private int wait_store;
+
     public void setPurchaseOrder_id(int id) {
         this.purchaseOrder_id = id;
     }
@@ -92,5 +94,12 @@ public class PurchaseDTO {
     }
     public double getPurchase_discount() {
         return this.purchase_discount;
+    }
+
+    public void setWait_store(int wait_store) {
+        this.wait_store = wait_store;
+    }
+    public int getWait_store() {
+        return this.wait_store;
     }
 }

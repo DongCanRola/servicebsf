@@ -136,6 +136,11 @@ public class WarehouseServiceImpl implements WarehouseService{
                 //更新仓库剩余空间
                 warehouse.setSpare(spare);
                 warehouseMapper.updateByPrimaryKey(warehouse);
+                //更新进货单状态
+                if(alreadyStore + currentNum == allNum) {
+                    purchaseOrder.setState(4);
+                    purchaseOrderMapper.updateByPrimaryKey(purchaseOrder);
+                }
             }
         }
 

@@ -5,10 +5,12 @@ import cn.dcan.dto.PurchaseDTO;
 import cn.dcan.entity.Customer;
 import cn.dcan.entity.Goods;
 import cn.dcan.entity.PurchaseOrder;
+import cn.dcan.entity.PurchaseStore;
 import cn.dcan.mapper.CustomerMapper;
 import cn.dcan.mapper.GoodsMapper;
 import cn.dcan.mapper.PurchaseOrderMapper;
 import cn.dcan.constrain.*;
+import cn.dcan.mapper.PurchaseStoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,8 @@ public class PurchaseServiceImpl implements PurchaseService{
     GoodsMapper goodsMapper;
     @Autowired
     CustomerMapper customerMapper;
+    @Autowired
+    PurchaseStoreMapper purchaseStoreMapper;
 
     private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
@@ -57,6 +61,19 @@ public class PurchaseServiceImpl implements PurchaseService{
             goods = goodsMapper.selectByPrimaryKey(purchaseOrder.getGoodsid());
             customer = customerMapper.selectByPrimaryKey(purchaseOrder.getProviderid());
             purchaseDTOS.add(entityToDto(purchaseOrder, goods, customer));
+        }
+        //到货进货订单未入库数量计算
+        if(state == 3) {
+            for(PurchaseDTO purchaseDTO : purchaseDTOS) {
+                int purchaseId = purchaseDTO.getPurchaseOrder_id();
+                List<PurchaseStore> purchaseStores = purchaseStoreMapper.selectByPurchase(purchaseId);
+                int alreadyStore = 0;
+                for(PurchaseStore purchaseStore : purchaseStores) {
+                    alreadyStore = alreadyStore + purchaseStore.getInnum();
+                }
+                int remaining = purchaseDTO.getPurchase_num() - alreadyStore;
+                purchaseDTO.setWait_store(remaining);
+            }
         }
         return purchaseDTOS;
     }
