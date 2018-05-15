@@ -51,16 +51,22 @@ public class ProcessServiceImpl implements ProcessService{
         return sampleDTOS;
     }
 
+    //增加生产处理
     @Override
     public int addProcess(ProcessDTO processDTO) {
         Process process = processDtoToEntity(processDTO);
         int count = processMapper.insertSelective(process);
-        if(process.getState() == 1) {
-            SaleOrder saleOrder = new SaleOrder();
-            saleOrder.setId(process.getSaleid());
-            saleOrder.setState(3);
-            saleOrderMapper.updateByPrimaryKeySelective(saleOrder);
-        }
+        //更新销售状态，设置成本
+        SaleOrder saleOrder = new SaleOrder();
+        saleOrder.setId(process.getSaleid());
+        saleOrder.setState(3);
+        Sample sample = sampleMapper.selectByPrimaryKey(process.getSampleid());
+        double cost = sample.getMaterialcost() + sample.getProcesscost() + sample.getHumancost();
+        saleOrder.setCost(cost);
+        saleOrderMapper.updateByPrimaryKeySelective(saleOrder);
+        //if(process.getState() == 1) {
+
+        //}
         return process.getId();
     }
 
