@@ -5,6 +5,7 @@ import cn.dcan.constrain.ConcreteDataFormat;
 import cn.dcan.dto.ProcessDTO;
 import cn.dcan.dto.ProcessOrderDTO;
 import cn.dcan.dto.SampleDTO;
+import cn.dcan.dto.SampleUseDTO;
 import cn.dcan.entity.*;
 import cn.dcan.entity.Process;
 import cn.dcan.mapper.*;
@@ -31,6 +32,12 @@ public class ProcessServiceImpl implements ProcessService{
     ProcessOrderMapper processOrderMapper;
     @Autowired
     MaterialUseMapper materialUseMapper;
+    @Autowired
+    SampleUseMapper sampleUseMapper;
+    @Autowired
+    PurchaseStoreMapper purchaseStoreMapper;
+    @Autowired
+    WarehouseMapper warehouseMapper;
 
     private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
@@ -49,6 +56,12 @@ public class ProcessServiceImpl implements ProcessService{
             sampleDTOS.add(sampleEntityToDto(sample));
         }
         return sampleDTOS;
+    }
+
+    @Override
+    public int updateSample(SampleDTO sampleDTO) {
+        Sample sample = sampleDtoToEntity(sampleDTO);
+        return sampleMapper.updateByPrimaryKeySelective(sample);
     }
 
     //增加生产处理
@@ -118,6 +131,27 @@ public class ProcessServiceImpl implements ProcessService{
         List<ProcessOrder> processOrders = processOrderMapper.selectByProcess(processid);
         //List<ProcessOrderDTO> processOrderDTOS = calculateRemaining(processOrders);
         return calculateRemaining(processOrders);
+    }
+
+    @Override
+    public int addSampleUse(SampleUseDTO sampleUseDTO) {
+        SampleUse sampleUse = suDtoToEntity(sampleUseDTO);
+        int count;
+        PurchaseStore purchaseStore = purchaseStoreMapper.selectByPrimaryKey(sampleUse.getPurchasestoreid());
+        int beforeNum = purchaseStore.getRemaining();
+        if(sampleUse.getUsenum() > beforeNum) {
+            return -1;
+        } else {
+            count = sampleUseMapper.insertSelective(sampleUse);
+            Warehouse warehouse = warehouseMapper.selectByPrimaryKey(purchaseStore.getWarehouseid());
+            double beforeSpare = warehouse.getSpare();
+            warehouse.setSpare(beforeSpare + sampleUse.getUsenum());
+            warehouseMapper.updateByPrimaryKey(warehouse);
+            purchaseStore.setRemaining(beforeNum - sampleUse.getUsenum());
+            purchaseStoreMapper.updateByPrimaryKey(purchaseStore);
+        }
+
+        return count;
     }
 
     private List<ProcessOrderDTO> calculateRemaining(List<ProcessOrder> processOrders) {
@@ -237,5 +271,15 @@ public class ProcessServiceImpl implements ProcessService{
         processOrderDTO.setList_state(processOrder.getState());
         processOrderDTO.setList_time(concreteDataFormat.DateToString(processOrder.getPlantime()));
         return processOrderDTO;
+    }
+
+    private SampleUse suDtoToEntity(SampleUseDTO sampleUseDTO) {
+        SampleUse sampleUse = new SampleUse();
+        sampleUse.setSampleid(sampleUseDTO.getUse_sampleId());
+        sampleUse.setPurchasestoreid(sampleUseDTO.getUse_purchaseStoreId());
+        sampleUse.setUsenum(sampleUseDTO.getUse_num());
+        sampleUse.setUsetime(concreteDataFormat.StringToDate(sampleUseDTO.getUse_time()));
+        sampleUse.setUserid(sampleUseDTO.getUse_sampleUser());
+        return sampleUse;
     }
 }

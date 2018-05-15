@@ -3,6 +3,7 @@ package cn.dcan.Service;
 import cn.dcan.dto.ProcessDTO;
 import cn.dcan.dto.ProcessOrderDTO;
 import cn.dcan.dto.SampleDTO;
+import cn.dcan.dto.SampleUseDTO;
 import cn.dcan.entity.PurchaseOrder;
 
 import java.util.List;
@@ -15,6 +16,8 @@ public interface ProcessService {
     int addSample(SampleDTO sampleDTO);
     //获取某一成品的所有样本信息
     List<SampleDTO> getSampleByProduct(int productid);
+
+    int updateSample(SampleDTO sampleDTO);
 
     //增加加工处理
     int addProcess(ProcessDTO processDTO);
@@ -29,4 +32,7 @@ public interface ProcessService {
     List<ProcessOrderDTO> getMaterialListByState(int state);
     //根据加工处理项查看加工材料单
     List<ProcessOrderDTO> getMaterialListByProcess(int processid);
+
+    //打样消耗
+    int addSampleUse(SampleUseDTO sampleUseDTO);
 }

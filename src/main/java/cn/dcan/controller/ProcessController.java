@@ -5,6 +5,7 @@ import cn.dcan.dto.ProcessDTO;
 import cn.dcan.dto.ProcessOrderDTO;
 import cn.dcan.dto.SampleDTO;
 import cn.dcan.constrain.*;
+import cn.dcan.dto.SampleUseDTO;
 import cn.dcan.entity.Process;
 import cn.dcan.entity.ProcessOrder;
 import org.omg.PortableInterceptor.INACTIVE;
@@ -42,6 +43,27 @@ public class ProcessController {
         if(newSample > 0)
             return Response.ok(new SimpleResponse(SimpleResponse.OK,Integer.toString(newSample))).build();
         return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "添加失败！")).build();
+    }
+
+    @RequestMapping(value = "/process/sample/update", method = RequestMethod.PUT)
+    @ResponseBody
+    public Response updateSample(@RequestBody SampleDTO sampleDTO) {
+        int result = processService.updateSample(sampleDTO);
+        if(result > 0)
+            return Response.ok(new SimpleResponse(SimpleResponse.OK, "更新样本成功！")).build();
+        return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "样本更新失败！")).build();
+    }
+
+    //打样消耗
+    @RequestMapping(value = "/process/sample/use", method = RequestMethod.POST)
+    @ResponseBody
+    public Response sampleUse(@RequestBody SampleUseDTO sampleUseDTO) {
+        Date date = new Date();
+        sampleUseDTO.setUse_time(concreteDataFormat.DateToString(date));
+        int result = processService.addSampleUse(sampleUseDTO);
+        if(result > 0)
+            return Response.ok(new SimpleResponse(SimpleResponse.OK, Integer.toString(result))).build();
+        return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "样本消耗数据错误！")).build();
     }
 
     @RequestMapping(value = "/process/process/list", method = RequestMethod.GET)
