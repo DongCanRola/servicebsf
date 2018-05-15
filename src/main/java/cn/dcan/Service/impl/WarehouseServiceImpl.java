@@ -103,23 +103,41 @@ public class WarehouseServiceImpl implements WarehouseService{
     @Override
     public int storePurchase(PurchaseStoreDTO purchaseStoreDTO) {
         PurchaseStore purchaseStore = psDtoToEntity(purchaseStoreDTO);
-        int count = purchaseStoreMapper.insertSelective(purchaseStore);
-        //更新库存盘点
+        //判断存入数量是否超过订单总量
         PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(purchaseStore.getPurchaseid());
         int goodsid = purchaseOrder.getGoodsid();
         int warehouseid = purchaseStore.getWarehouseid();
-        MaterialStockKey materialStockKey = new MaterialStockKey();
-        materialStockKey.setGoodsid(goodsid);
-        materialStockKey.setWarehouseid(warehouseid);
-        MaterialStock materialStock = materialStockMapper.selectByPrimaryKey(materialStockKey);
-        int num = materialStock.getNum() + purchaseStore.getInnum();
-        materialStock.setNum(num);
-        materialStockMapper.updateByPrimaryKey(materialStock);
-        //更新仓库剩余空间
-        Warehouse warehouse = warehouseMapper.selectByPrimaryKey(warehouseid);
-        double spare = warehouse.getSpare() - purchaseStore.getInnum();
-        warehouse.setSpare(spare);
-        warehouseMapper.updateByPrimaryKey(warehouse);
+        int allNum = purchaseOrder.getNum();
+        List<PurchaseStore> purchaseStores = purchaseStoreMapper.selectByPurchase(purchaseOrder.getId());
+        int alreadyStore = 0;
+        for(PurchaseStore purchaseStore1 : purchaseStores) {
+            alreadyStore = alreadyStore + purchaseStore1.getInnum();
+        }
+        int currentNum = purchaseStore.getInnum();
+        if(alreadyStore + currentNum > allNum) {
+            return -1;
+        } else {
+            //判断仓库剩余空间是否足够
+            Warehouse warehouse = warehouseMapper.selectByPrimaryKey(warehouseid);
+            double spare = warehouse.getSpare() - purchaseStore.getInnum();
+            if(spare < 0) {
+                return 0;
+            } else {
+                //进货存储
+                int count = purchaseStoreMapper.insertSelective(purchaseStore);
+                //更新库存盘点
+                MaterialStockKey materialStockKey = new MaterialStockKey();
+                materialStockKey.setGoodsid(goodsid);
+                materialStockKey.setWarehouseid(warehouseid);
+                MaterialStock materialStock = materialStockMapper.selectByPrimaryKey(materialStockKey);
+                int num = materialStock.getNum() + purchaseStore.getInnum();
+                materialStock.setNum(num);
+                materialStockMapper.updateByPrimaryKey(materialStock);
+                //更新仓库剩余空间
+                warehouse.setSpare(spare);
+                warehouseMapper.updateByPrimaryKey(warehouse);
+            }
+        }
 
         return purchaseStore.getId();
     }
