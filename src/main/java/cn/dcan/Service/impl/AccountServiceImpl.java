@@ -154,27 +154,74 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<SaleGatherDTO> getSaleGatherList() {
-        return null;
+        List<SaleGather> saleGathers = saleGatherMapper.selectAll();
+        List<SaleGatherDTO> saleGatherDTOS = new ArrayList<>();
+        for(SaleGather saleGather : saleGathers) {
+            int saleId = saleGather.getSaleid();
+            int gatherId = saleGather.getId();
+            SaleOrder saleOrder = saleOrderMapper.selectByPrimaryKey(saleId);
+            List<SaleGatherDetail> saleGatherDetails = saleGatherDetailMapper.selectByGatherId(gatherId);
+            saleGatherDTOS.add(sgEntityToDto(saleGather, saleOrder, saleGatherDetails));
+        }
+        return saleGatherDTOS;
     }
 
     @Override
     public int addSaleGatherDetail(SaleGatherDetailDTO saleGatherDetailDTO) {
-        return 0;
+        SaleGatherDetail saleGatherDetail = sgdDtoToEntity(saleGatherDetailDTO);
+        //判断收款是否超额
+        int gatherId = saleGatherDetail.getGatherid();
+        double currentGather = saleGatherDetail.getMoney();
+        SaleGather saleGather = saleGatherMapper.selectByPrimaryKey(gatherId);
+        List<SaleGatherDetail> saleGatherDetails = saleGatherDetailMapper.selectByGatherId(gatherId);
+        double alreadyGather = 0;
+        for(SaleGatherDetail saleGatherDetail1 : saleGatherDetails) {
+            alreadyGather = alreadyGather + saleGatherDetail1.getMoney();
+        }
+        double actualTotal = saleGather.getActualtotal();
+        if(alreadyGather + currentGather > actualTotal) {
+            return -1;
+        } else {
+            //增加收款详情
+            int count = saleGatherDetailMapper.insertSelective(saleGatherDetail);
+            //更新账户余额
+            String savingsId = saleGatherDetail.getSavingsid();
+            Savings savings = savingsMapper.selectByPrimaryKey(savingsId);
+            double currentBalance = savings.getBalance() + currentGather;
+            savings.setBalance(currentBalance);
+            savingsMapper.updateByPrimaryKey(savings);
+        }
+        return saleGatherDetail.getId();
     }
 
     @Override
     public List<SaleGatherDetailDTO> getSaleGatherDetailList() {
-        return null;
+        List<SaleGatherDetail> saleGatherDetails = saleGatherDetailMapper.selectAll();
+        List<SaleGatherDetailDTO> saleGatherDetailDTOS = new ArrayList<>();
+        for(SaleGatherDetail saleGatherDetail : saleGatherDetails) {
+            saleGatherDetailDTOS.add(sgdEntityToDto(saleGatherDetail));
+        }
+        return saleGatherDetailDTOS;
     }
 
     @Override
     public List<SaleGatherDetailDTO> getSaleGatherDetailByGather(int gatherId) {
-        return null;
+        List<SaleGatherDetail> saleGatherDetails = saleGatherDetailMapper.selectByGatherId(gatherId);
+        List<SaleGatherDetailDTO> saleGatherDetailDTOS = new ArrayList<>();
+        for(SaleGatherDetail saleGatherDetail : saleGatherDetails) {
+            saleGatherDetailDTOS.add(sgdEntityToDto(saleGatherDetail));
+        }
+        return saleGatherDetailDTOS;
     }
 
     @Override
     public List<SaleGatherDetailDTO> getSaleGatherDetailBySavings(String savings) {
-        return null;
+        List<SaleGatherDetail> saleGatherDetails = saleGatherDetailMapper.selectBySavingsId(savings);
+        List<SaleGatherDetailDTO> saleGatherDetailDTOS = new ArrayList<>();
+        for(SaleGatherDetail saleGatherDetail : saleGatherDetails) {
+            saleGatherDetailDTOS.add(sgdEntityToDto(saleGatherDetail));
+        }
+        return saleGatherDetailDTOS;
     }
 
     private SavingsDTO entityToDto(Savings savings) {
@@ -231,6 +278,38 @@ public class AccountServiceImpl implements AccountService {
 
     private SaleGatherDTO sgEntityToDto(SaleGather saleGather, SaleOrder saleOrder, List<SaleGatherDetail> saleGatherDetails) {
         SaleGatherDTO saleGatherDTO = new SaleGatherDTO();
+        saleGatherDTO.setGather_id(saleGather.getId());
+        saleGatherDTO.setGather_saleId(saleGather.getSaleid());
+        saleGatherDTO.setGather_planTotal(saleGather.getPlantotal());
+        saleGatherDTO.setGather_discount(saleGather.getDiscount());
+        saleGatherDTO.setGather_actualTotal(saleGather.getActualtotal());
+        saleGatherDTO.setGather_saleTime(concreteDataFormat.DateToString(saleOrder.getOrdertime()));
+        double alreadyGather = 0;
+        for(SaleGatherDetail saleGatherDetail : saleGatherDetails) {
+            alreadyGather = alreadyGather + saleGatherDetail.getMoney();
+        }
+        saleGatherDTO.setGather_already(alreadyGather);
+        saleGatherDTO.setGather_surplus(saleGather.getActualtotal() - alreadyGather);
         return saleGatherDTO;
+    }
+
+    private SaleGatherDetail sgdDtoToEntity(SaleGatherDetailDTO saleGatherDetailDTO) {
+        SaleGatherDetail saleGatherDetail = new SaleGatherDetail();
+        saleGatherDetail.setGatherid(saleGatherDetailDTO.getDetail_gather());
+        saleGatherDetail.setMoney(saleGatherDetailDTO.getDetail_money());
+        saleGatherDetail.setGathertime(concreteDataFormat.StringToDate(saleGatherDetailDTO.getDetail_time()));
+        saleGatherDetail.setSavingsid(saleGatherDetailDTO.getDetail_savings());
+        saleGatherDetail.setUserid(saleGatherDetailDTO.getDetail_user());
+        return saleGatherDetail;
+    }
+    private SaleGatherDetailDTO sgdEntityToDto(SaleGatherDetail saleGatherDetail) {
+        SaleGatherDetailDTO saleGatherDetailDTO = new SaleGatherDetailDTO();
+        saleGatherDetailDTO.setDetail_id(saleGatherDetail.getId());
+        saleGatherDetailDTO.setDetail_gather(saleGatherDetail.getGatherid());
+        saleGatherDetailDTO.setDetail_money(saleGatherDetail.getMoney());
+        saleGatherDetailDTO.setDetail_time(concreteDataFormat.DateToString(saleGatherDetail.getGathertime()));
+        saleGatherDetailDTO.setDetail_user(saleGatherDetail.getUserid());
+        saleGatherDetailDTO.setDetail_savings(saleGatherDetail.getSavingsid());
+        return saleGatherDetailDTO;
     }
 }

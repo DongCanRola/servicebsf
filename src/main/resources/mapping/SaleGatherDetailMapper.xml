@@ -30,7 +30,7 @@
       #{gathertime,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER}, #{savingsid,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="cn.dcan.entity.SaleGatherDetail" >
+  <insert id="insertSelective" useGeneratedKeys="true" parameterType="cn.dcan.entity.SaleGatherDetail" >
     insert into salegatherdetail
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -72,6 +72,9 @@
         #{savingsid,jdbcType=VARCHAR},
       </if>
     </trim>
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="cn.dcan.entity.SaleGatherDetail" >
     update salegatherdetail
@@ -103,4 +106,21 @@
       savingsid = #{savingsid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectByGatherId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from salegatherdetail
+    where gatherid = #{gatherid,jdbcType=INTEGER}
+  </select>
+  <select id="selectBySavingsId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from salegatherdetail
+    where savingsid = #{savingsid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from salegatherdetail
+  </select>
 </mapper>

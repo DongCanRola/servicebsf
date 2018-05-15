@@ -1,15 +1,14 @@
 package cn.dcan.controller;
 
 import cn.dcan.Service.AccountService;
-import cn.dcan.dto.PurchasePayDTO;
-import cn.dcan.dto.PurchasePayDetailDTO;
-import cn.dcan.dto.SavingsDTO;
+import cn.dcan.dto.*;
 import cn.dcan.constrain.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.util.*;
 
@@ -75,5 +74,54 @@ public class AccountController {
         int payId = Integer.parseInt(request.getHeader("purchasePay_id"));
         List<PurchasePayDetailDTO> purchasePayDetailDTOS = accountService.getPurchasePayDetailByPay(payId);
         return Response.ok(purchasePayDetailDTOS).build();
+    }
+
+    @RequestMapping(value = "/purchase/pay/detail/savingsList", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getPurchasePayDetailBySavings(HttpServletRequest request) {
+        String savingsId = request.getHeader("savings_id");
+        List<PurchasePayDetailDTO> purchasePayDetailDTOS = accountService.getPurchasePayDetailBySavings(savingsId);
+        return Response.ok(purchasePayDetailDTOS).build();
+    }
+
+    @RequestMapping(value = "/sale/gather/list", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getSaleGatherList() {
+        List<SaleGatherDTO> saleGatherDTOS = accountService.getSaleGatherList();
+        return Response.ok(saleGatherDTOS).build();
+    }
+
+    @RequestMapping(value = "/sale/gather/detail/add", method = RequestMethod.POST)
+    @ResponseBody
+    public Response addSaleGatherDetail(@RequestBody SaleGatherDetailDTO saleGatherDetailDTO) {
+        Date date = new Date();
+        saleGatherDetailDTO.setDetail_time(concreteDataFormat.DateToString(date));
+        int newDetail = accountService.addSaleGatherDetail(saleGatherDetailDTO);
+        if(newDetail > 0)
+            return Response.ok(new SimpleResponse(SimpleResponse.OK, Integer.toString(newDetail))).build();
+        return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "收款失败！")).build();
+    }
+
+    @RequestMapping(value = "/sale/gather/detail/allList", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getSaleGatherDetailAll() {
+        List<SaleGatherDetailDTO> saleGatherDetailDTOS = accountService.getSaleGatherDetailList();
+        return Response.ok(saleGatherDetailDTOS).build();
+    }
+
+    @RequestMapping(value = "/sale/gather/detail/gatherList", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getSaleGatherDetailByGather(HttpServletRequest request) {
+        int gatherId = Integer.parseInt(request.getHeader("sale_gatherId"));
+        List<SaleGatherDetailDTO> saleGatherDetailDTOS = accountService.getSaleGatherDetailByGather(gatherId);
+        return Response.ok(saleGatherDetailDTOS).build();
+    }
+
+    @RequestMapping(value = "/sale/gather/detail/savingsList", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getSaleGatherDetailBySavings(HttpServletRequest request) {
+        String savingsId = request.getHeader("savings_id");
+        List<SaleGatherDetailDTO> saleGatherDetailDTOS = accountService.getSaleGatherDetailBySavings(savingsId);
+        return Response.ok(saleGatherDetailDTOS).build();
     }
 }
