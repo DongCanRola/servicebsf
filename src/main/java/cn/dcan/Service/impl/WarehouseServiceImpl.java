@@ -173,6 +173,17 @@ public class WarehouseServiceImpl implements WarehouseService{
     }
 
     @Override
+    public List<PurchaseStoreDTO> getPurchaseStoreByPurchase(int purchaseid) {
+        List<PurchaseStore> purchaseStores = purchaseStoreMapper.selectByPurchase(purchaseid);
+        PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(purchaseid);
+        List<PurchaseStoreDTO> purchaseStoreDTOS = new ArrayList<>();
+        for(PurchaseStore purchaseStore : purchaseStores) {
+            purchaseStoreDTOS.add(psEntityToDto(purchaseStore, purchaseOrder));
+        }
+        return purchaseStoreDTOS;
+    }
+
+    @Override
     public int useMaterial(MaterialUseDTO materialUseDTO) {
         MaterialUse materialUse = muDtoToEntity(materialUseDTO);
 

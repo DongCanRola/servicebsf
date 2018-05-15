@@ -27,6 +27,8 @@ public interface WarehouseService {
     List<PurchaseStoreDTO> getPurchaseStore();
     //获取某种材料的存储分配
     List<PurchaseStoreDTO> getPurchaseStoreByGoods(int goodsid);
+    //根据进货单获取存储分配表
+    List<PurchaseStoreDTO> getPurchaseStoreByPurchase(int purchaseid);
 
     //加工材料调度
     int useMaterial(MaterialUseDTO materialUseDTO);

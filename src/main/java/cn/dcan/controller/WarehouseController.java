@@ -97,6 +97,14 @@ public class WarehouseController {
         return Response.ok(purchaseStoreDTOS).build();
     }
 
+    @RequestMapping(value = "/warehouse/purchase/store/purchaseList", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getPurchaseStoreByPurchase(HttpServletRequest request) {
+        int purchaseId = Integer.parseInt(request.getHeader("purchase_orderId"));
+        List<PurchaseStoreDTO> purchaseStoreDTOS = warehouseService.getPurchaseStoreByPurchase(purchaseId);
+        return Response.ok(purchaseStoreDTOS).build();
+    }
+
     @RequestMapping(value = "/warehouse/purchase/storeByGoods", method = RequestMethod.GET)
     @ResponseBody
     public Response getPurchaseStoreByGoods(HttpServletRequest request) {
