@@ -362,6 +362,22 @@ public class WarehouseServiceImpl implements WarehouseService{
             double spare = warehouse.getSpare() + outNum;
             warehouse.setSpare(spare);
             warehouseMapper.updateByPrimaryKey(warehouse);
+            //判断是否更改销售状态为已出库
+            int saleId = productStore.getSaleid();
+            SaleOrder saleOrder = saleOrderMapper.selectByPrimaryKey(saleId);
+            List<ProductStore> productStoreList = productStoreMapper.selectBySale(saleId);
+            int alreadySend = 0;
+            for(ProductStore proStore : productStoreList) {
+                int psId = proStore.getId();
+                List<ProductSend> productSendList = productSendMapper.selectByStore(psId);
+                for(ProductSend proSend : productSendList) {
+                    alreadySend = alreadySend + proSend.getOutnum();
+                }
+            }
+            if(alreadySend == saleOrder.getNum()) {
+                saleOrder.setState(8);
+                saleOrderMapper.updateByPrimaryKey(saleOrder);
+            }
         }
 
         return productSend.getId();
