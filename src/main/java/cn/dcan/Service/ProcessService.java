@@ -18,6 +18,8 @@ public interface ProcessService {
     List<SampleDTO> getSampleByProduct(int productid);
 
     int updateSample(SampleDTO sampleDTO);
+    //根据id查看样本信息
+    SampleDTO getSampleById(int id);
 
     //增加加工处理
     int addProcess(ProcessDTO processDTO);
@@ -25,6 +27,8 @@ public interface ProcessService {
     List<ProcessDTO> getAllProcess();
     //更新加工处理信息（状态）
     int updateProcess(ProcessDTO processDTO);
+    //根据状态获取加工处理条目
+    List<ProcessDTO> getProcessByState(int state);
 
     //添加加工材料单
     int addMaterialList(ProcessOrderDTO processOrderDTO);

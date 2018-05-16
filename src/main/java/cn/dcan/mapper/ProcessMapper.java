@@ -20,4 +20,6 @@ public interface ProcessMapper {
     List<Process> selectAll();
 
     Process selectBySaleOrder(Integer saleid);
+
+    List<Process> selectByState(Integer state);
 }

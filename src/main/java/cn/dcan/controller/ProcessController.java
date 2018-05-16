@@ -8,6 +8,7 @@ import cn.dcan.constrain.*;
 import cn.dcan.dto.SampleUseDTO;
 import cn.dcan.entity.Process;
 import cn.dcan.entity.ProcessOrder;
+import cn.dcan.entity.Sample;
 import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +67,14 @@ public class ProcessController {
         return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "样本消耗数据错误！")).build();
     }
 
+    @RequestMapping(value = "/process/sample/getOne", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getSampleById(HttpServletRequest request) {
+        int sampleId = Integer.parseInt(request.getHeader("sample_id"));
+        SampleDTO sampleDTO = processService.getSampleById(sampleId);
+        return Response.ok(sampleDTO).build();
+    }
+
     @RequestMapping(value = "/process/process/list", method = RequestMethod.GET)
     @ResponseBody
     public Response getProcessList() {
@@ -90,6 +99,14 @@ public class ProcessController {
             return Response.ok(new SimpleResponse(SimpleResponse.OK,"更新成功!")).build();
         }
         return Response.ok(new SimpleResponse(SimpleResponse.ERROR,"更新失败！")).build();
+    }
+
+    @RequestMapping(value = "/process/process/stateList", method = RequestMethod.GET)
+    @ResponseBody
+    public Response getProcessByState(HttpServletRequest request) {
+        int state = Integer.parseInt(request.getHeader("process_state"));
+        List<ProcessDTO> processDTOS = processService.getProcessByState(state);
+        return Response.ok(processDTOS).build();
     }
 
     //增加加工材料单

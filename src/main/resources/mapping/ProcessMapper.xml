@@ -93,15 +93,21 @@
       user = #{user,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectAll">
+  <select id="selectAll" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from process
   </select>
-  <select id="selectBySaleOrder">
+  <select id="selectBySaleOrder" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from process
     where saleid = #{saleid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByState" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from process
+    where state = #{state,jdbcType=INTEGER}
   </select>
 </mapper>

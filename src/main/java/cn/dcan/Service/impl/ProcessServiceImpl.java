@@ -64,6 +64,12 @@ public class ProcessServiceImpl implements ProcessService{
         return sampleMapper.updateByPrimaryKeySelective(sample);
     }
 
+    @Override
+    public SampleDTO getSampleById(int id) {
+        Sample sample = sampleMapper.selectByPrimaryKey(id);
+        return sampleEntityToDto(sample);
+    }
+
     //增加生产处理
     @Override
     public int addProcess(ProcessDTO processDTO) {
@@ -110,6 +116,16 @@ public class ProcessServiceImpl implements ProcessService{
             saleOrderMapper.updateByPrimaryKeySelective(saleOrder);
         }
         return count;
+    }
+
+    @Override
+    public List<ProcessDTO> getProcessByState(int state) {
+        List<Process> processes = processMapper.selectByState(state);
+        List<ProcessDTO> processDTOS = new ArrayList<>();
+        for(Process process : processes) {
+            processDTOS.add(processEntityToDto(process));
+        }
+        return processDTOS;
     }
 
     @Override
