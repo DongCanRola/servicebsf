@@ -10,6 +10,7 @@ public class ProcessDTO {
     private int sample_id;
     private int process_state;
     private int process_userId;
+    private int process_productNum;
 
     public void setProcess_id(int id) {
         this.process_id = id;
@@ -44,5 +45,12 @@ public class ProcessDTO {
     }
     public int getProcess_userId() {
         return this.process_userId;
+    }
+
+    public void setProcess_productNum(int num) {
+        this.process_productNum = num;
+    }
+    public int getProcess_productNum() {
+        return this.process_productNum;
     }
 }

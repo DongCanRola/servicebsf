@@ -132,6 +132,13 @@ public class ProcessServiceImpl implements ProcessService{
         for(Process process : processes) {
             processDTOS.add(processEntityToDto(process));
         }
+        if(state > 1) {
+            for(ProcessDTO processDTO : processDTOS) {
+                int saleId = processDTO.getSale_orderId();
+                SaleOrder saleOrder = saleOrderMapper.selectByPrimaryKey(saleId);
+                processDTO.setProcess_productNum(saleOrder.getNum());
+            }
+        }
         return processDTOS;
     }
 
