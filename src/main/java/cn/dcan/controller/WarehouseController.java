@@ -136,7 +136,7 @@ public class WarehouseController {
         return Response.ok().build();
     }
 
-    @RequestMapping(value = "/warehouse/process/materialUse/processList", method = RequestMethod.GET)
+    @RequestMapping(value = "/warehouse/process/materialUse/processOrderList", method = RequestMethod.GET)
     @ResponseBody
     public Response getProcessMaterialUseByProcess(HttpServletRequest request) {
         int processOrderId = Integer.parseInt(request.getHeader("processOrderId"));
