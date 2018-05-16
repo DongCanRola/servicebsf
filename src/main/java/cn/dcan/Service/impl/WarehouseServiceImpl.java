@@ -41,6 +41,8 @@ public class WarehouseServiceImpl implements WarehouseService{
     ProductSendMapper productSendMapper;
     @Autowired
     ProcessMapper processMapper;
+    @Autowired
+    SaleOrderMapper saleOrderMapper;
 
     private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
@@ -311,11 +313,28 @@ public class WarehouseServiceImpl implements WarehouseService{
         if(beforeSpare < (double)num) {
             return -1;
         } else {
-            int count = productStoreMapper.insertSelective(productStore);
-            //更新仓库空闲空间
-            double spare = warehouse.getSpare() - num;
-            warehouse.setSpare(spare);
-            warehouseMapper.updateByPrimaryKey(warehouse);
+            //判断存储总量是否符合销售单
+            int saleId = productStore.getSaleid();
+            SaleOrder saleOrder =saleOrderMapper.selectByPrimaryKey(saleId);
+            List<ProductStore> productStoreList = productStoreMapper.selectBySale(saleId);
+            int alreadyStored = 0;
+            for(ProductStore prostore : productStoreList) {
+                alreadyStored = alreadyStored + prostore.getInnum();
+            }
+            if(alreadyStored + num > saleOrder.getNum()) {
+                return 0;
+            } else {
+                int count = productStoreMapper.insertSelective(productStore);
+                //更新仓库空闲空间
+                double spare = warehouse.getSpare() - num;
+                warehouse.setSpare(spare);
+                warehouseMapper.updateByPrimaryKey(warehouse);
+                //判断是否更新销售单状态
+                if(alreadyStored + num == saleOrder.getNum()) {
+                    saleOrder.setState(7);
+                    saleOrderMapper.updateByPrimaryKey(saleOrder);
+                }
+            }
         }
 
         return productStore.getId();
