@@ -103,6 +103,13 @@ public class ProcessServiceImpl implements ProcessService{
     public int updateProcess(ProcessDTO processDTO) {
         Process process = processDtoToEntity(processDTO);
         int count = processMapper.updateByPrimaryKeySelective(process);
+        if(processDTO.getProcess_state() == 2) {
+            List<ProcessOrder> processOrders = processOrderMapper.selectByProcess(process.getId());
+            for(ProcessOrder processOrder : processOrders) {
+                processOrder.setState(1);
+                processOrderMapper.updateByPrimaryKey(processOrder);
+            }
+        }
         if(processDTO.getProcess_state() == 4) {
             SaleOrder saleOrder = new SaleOrder();
             saleOrder.setId(processDTO.getSale_orderId());
