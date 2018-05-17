@@ -68,4 +68,20 @@ public class UserController {
         return Response.ok(new SimpleResponse(SimpleResponse.OK,Integer.toString(newId))).build();
     }
 
+    @RequestMapping(value = "/user/modify/password", method = RequestMethod.PUT)
+    @ResponseBody
+    public Response modifyUserPassword(HttpServletRequest request) {
+        int userId = Integer.parseInt(request.getHeader("user_id"));
+        String oldPassword = request.getHeader("password_old");
+        String newPassword = request.getHeader("password_new");
+        //System.out.println("修改密码："+userId);
+        //System.out.println("原始密码："+oldPassword);
+        //System.out.println("新密码："+newPassword);
+        int result = userService.modifyUserPassword(userId, oldPassword.getBytes(), newPassword.getBytes());
+        if(result > 0) {
+            return Response.ok(new SimpleResponse(SimpleResponse.OK, "密码修改成功！")).build();
+        }
+        return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "密码修改失败！")).build();
+    }
+
 }

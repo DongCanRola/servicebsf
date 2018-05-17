@@ -10,4 +10,6 @@ public interface UserService {
     UserDTO verifyUser(int id, byte[] password, int role);
     List<UserDTO> getUserList();
     int addUser(UserDTO userDTO);
+
+    int modifyUserPassword(int userId, byte[] oldPassword, byte[] newPassword);
 }

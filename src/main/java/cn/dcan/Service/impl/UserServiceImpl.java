@@ -69,6 +69,16 @@ public class UserServiceImpl implements UserService{
         return user.getId();
     }
 
+    @Override
+    public int modifyUserPassword(int userId, byte[] oldPassword, byte[] newPassword) {
+        User user = userMapper.verifyUser(userId, oldPassword);
+        if(user != null) {
+            user.setPassword(newPassword);
+            return userMapper.updateByPrimaryKeySelective(user);
+        }
+        return 0;
+    }
+
     private User dtoToEntity(UserDTO userDTO) {
         User user = new User();
         if(userDTO.getUser_name() != null) {
