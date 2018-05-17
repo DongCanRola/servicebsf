@@ -6,6 +6,10 @@
     <id column="goodsid" property="goodsid" jdbcType="INTEGER" />
     <result column="num" property="num" jdbcType="INTEGER" />
   </resultMap>
+  <resultMap id="GoodsStockMap" type="cn.dcan.entity.GoodsSum">
+    <id column="goodsid" property="goodsid" jdbcType="INTEGER"/>
+    <result column="total" property="total" jdbcType="INTEGER"/>
+  </resultMap>
   <sql id="Base_Column_List" >
     warehouseid, goodsid, num
   </sql>
@@ -80,7 +84,7 @@
     from materialstock
     where goodsid = #{goodsid,jdbcType=INTEGER}
   </select>
-  <select id="selectGoodsSum" resultMap="Map">
+  <select id="selectGoodsSum" resultMap="GoodsStockMap">
     select goodsid, sum(num) as total
     from materialstock
     group by goodsid

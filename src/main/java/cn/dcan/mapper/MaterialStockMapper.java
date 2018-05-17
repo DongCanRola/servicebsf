@@ -2,6 +2,7 @@ package cn.dcan.mapper;
 
 import cn.dcan.entity.MaterialStock;
 import cn.dcan.entity.MaterialStockKey;
+import cn.dcan.entity.GoodsSum;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public interface MaterialStockMapper {
 
     List<MaterialStock> selectByGoods(Integer goodsid);
 
-    Map<Integer,Integer> selectGoodsSum();
+    List<GoodsSum> selectGoodsSum();
 
     Integer selectNumOfGoods(Integer goodsid);
 }

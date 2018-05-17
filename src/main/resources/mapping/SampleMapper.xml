@@ -117,7 +117,7 @@
       user = #{user,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByProduct">
+  <select id="selectByProduct" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from sample

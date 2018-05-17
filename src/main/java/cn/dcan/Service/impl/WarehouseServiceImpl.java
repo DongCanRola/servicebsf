@@ -86,8 +86,19 @@ public class WarehouseServiceImpl implements WarehouseService{
 
     @Override
     public List<GoodsDTO> getTotalByGoods() {
-        Map<Integer, Integer> goodsTotal = materialStockMapper.selectGoodsSum();
+        List<GoodsSum> goodsTotal = materialStockMapper.selectGoodsSum();
         List<GoodsDTO> goodsDTOS = new ArrayList<>();
+        for(GoodsSum goodsSum : goodsTotal) {
+            int goodsid = goodsSum.getGoodsid();
+            int total = goodsSum.getTotal();
+            Goods goods = goodsMapper.selectByPrimaryKey(goodsid);
+            GoodsDTO goodsDTO = new GoodsDTO();
+            goodsDTO.setGoods_id(goodsid);
+            goodsDTO.setGoods_name(goods.getName());
+            goodsDTO.setGoods_remaining(total);
+            goodsDTOS.add(goodsDTO);
+        }
+        /*
         for(Map.Entry<Integer, Integer> entry : goodsTotal.entrySet()) {
             int goodsid = entry.getKey();
             int goodsSum = entry.getValue();
@@ -98,6 +109,7 @@ public class WarehouseServiceImpl implements WarehouseService{
             goodsDTO.setGoods_remaining(goodsSum);
             goodsDTOS.add(goodsDTO);
         }
+         */
         return goodsDTOS;
     }
 
