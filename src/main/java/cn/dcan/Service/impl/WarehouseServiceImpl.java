@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -376,6 +377,8 @@ public class WarehouseServiceImpl implements WarehouseService{
             }
             if(alreadySend == saleOrder.getNum()) {
                 saleOrder.setState(8);
+                Date date = new Date();
+                saleOrder.setOrdertime(date);
                 saleOrderMapper.updateByPrimaryKey(saleOrder);
             }
         }
