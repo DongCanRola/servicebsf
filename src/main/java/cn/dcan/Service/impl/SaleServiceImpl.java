@@ -3,8 +3,10 @@ package cn.dcan.Service.impl;
 import cn.dcan.Service.SaleService;
 import cn.dcan.dto.SaleDTO;
 import cn.dcan.entity.Process;
+import cn.dcan.entity.ProductStore;
 import cn.dcan.entity.SaleOrder;
 import cn.dcan.mapper.ProcessMapper;
+import cn.dcan.mapper.ProductStoreMapper;
 import cn.dcan.mapper.SaleOrderMapper;
 import cn.dcan.constrain.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class SaleServiceImpl implements SaleService{
     SaleOrderMapper saleOrderMapper;
     @Autowired
     ProcessMapper processMapper;
+    @Autowired
+    ProductStoreMapper productStoreMapper;
 
     private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
@@ -32,6 +36,18 @@ public class SaleServiceImpl implements SaleService{
         List<SaleDTO> saleDTOS = new ArrayList<>();
         for(SaleOrder saleOrder : saleOrders) {
             saleDTOS.add(saleEntityToDto(saleOrder));
+        }
+        //加工完成订单未入库数量计算
+        if(state == 6) {
+            for(SaleDTO sd : saleDTOS) {
+                int saleId = sd.getSale_orderId();
+                List<ProductStore> productStoreList = productStoreMapper.selectBySale(saleId);
+                int alreadyStore = 0;
+                for(ProductStore productStore : productStoreList) {
+                    alreadyStore = alreadyStore + productStore.getInnum();
+                }
+                sd.setStore_remaining(sd.getSale_num() - alreadyStore);
+            }
         }
         return saleDTOS;
     }
