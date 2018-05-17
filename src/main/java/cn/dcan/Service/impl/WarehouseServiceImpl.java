@@ -148,9 +148,18 @@ public class WarehouseServiceImpl implements WarehouseService{
                 materialStockKey.setGoodsid(goodsid);
                 materialStockKey.setWarehouseid(warehouseid);
                 MaterialStock materialStock = materialStockMapper.selectByPrimaryKey(materialStockKey);
-                int num = materialStock.getNum() + purchaseStore.getInnum();
-                materialStock.setNum(num);
-                materialStockMapper.updateByPrimaryKey(materialStock);
+                //如果之前没有则存储，有则更新
+                if(materialStock == null) {
+                    MaterialStock ms = new MaterialStock();
+                    ms.setGoodsid(goodsid);
+                    ms.setWarehouseid(warehouseid);
+                    ms.setNum(currentNum);
+                    materialStockMapper.insert(ms);
+                } else {
+                    int num = materialStock.getNum() + purchaseStore.getInnum();
+                    materialStock.setNum(num);
+                    materialStockMapper.updateByPrimaryKey(materialStock);
+                }
                 //更新仓库剩余空间
                 warehouse.setSpare(spare);
                 warehouseMapper.updateByPrimaryKey(warehouse);
