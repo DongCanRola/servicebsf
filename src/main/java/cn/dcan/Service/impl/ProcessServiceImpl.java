@@ -38,6 +38,10 @@ public class ProcessServiceImpl implements ProcessService{
     PurchaseStoreMapper purchaseStoreMapper;
     @Autowired
     WarehouseMapper warehouseMapper;
+    @Autowired
+    PurchaseOrderMapper purchaseOrderMapper;
+    @Autowired
+    MaterialStockMapper materialStockMapper;
 
     private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
@@ -103,6 +107,7 @@ public class ProcessServiceImpl implements ProcessService{
     public int updateProcess(ProcessDTO processDTO) {
         Process process = processDtoToEntity(processDTO);
         int count = processMapper.updateByPrimaryKeySelective(process);
+        process = processMapper.selectByPrimaryKey(process.getId());
         if(processDTO.getProcess_state() == 2) {
             List<ProcessOrder> processOrders = processOrderMapper.selectByProcess(process.getId());
             for(ProcessOrder processOrder : processOrders) {
@@ -111,14 +116,16 @@ public class ProcessServiceImpl implements ProcessService{
             }
         }
         if(processDTO.getProcess_state() == 4) {
-            SaleOrder saleOrder = new SaleOrder();
-            saleOrder.setId(processDTO.getSale_orderId());
+            System.out.println("process state to " + 4);
+            SaleOrder saleOrder = saleOrderMapper.selectByPrimaryKey(process.getSaleid());
+            //saleOrder.setId(processDTO.getSale_orderId());
             saleOrder.setState(5);
             saleOrderMapper.updateByPrimaryKeySelective(saleOrder);
         }
         if(processDTO.getProcess_state() == 5) {
-            SaleOrder saleOrder = new SaleOrder();
-            saleOrder.setId(processDTO.getSale_orderId());
+            System.out.println("process state to " + 5);
+            SaleOrder saleOrder = saleOrderMapper.selectByPrimaryKey(process.getSaleid());
+            //saleOrder.setId(processDTO.getSale_orderId());
             saleOrder.setState(6);
             saleOrderMapper.updateByPrimaryKeySelective(saleOrder);
         }
@@ -179,6 +186,17 @@ public class ProcessServiceImpl implements ProcessService{
             warehouseMapper.updateByPrimaryKey(warehouse);
             purchaseStore.setRemaining(beforeNum - sampleUse.getUsenum());
             purchaseStoreMapper.updateByPrimaryKey(purchaseStore);
+            int purchaseId = purchaseStore.getPurchaseid();
+            PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(purchaseId);
+            int goodsId = purchaseOrder.getGoodsid();
+            int warehouseId = purchaseStore.getWarehouseid();
+            MaterialStockKey materialStockKey = new MaterialStockKey();
+            materialStockKey.setGoodsid(goodsId);
+            materialStockKey.setWarehouseid(warehouseId);
+            MaterialStock materialStock = materialStockMapper.selectByPrimaryKey(materialStockKey);
+            int currentNum = materialStock.getNum() - sampleUse.getUsenum();
+            materialStock.setNum(currentNum);
+            materialStockMapper.updateByPrimaryKey(materialStock);
         }
 
         return count;
