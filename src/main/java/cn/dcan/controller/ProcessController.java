@@ -112,7 +112,7 @@ public class ProcessController {
     //增加加工材料单
     @RequestMapping(value = "/process/process/material/add", method = RequestMethod.POST)
     @ResponseBody
-    public Response addProcessMaterialList(ProcessOrderDTO processOrderDTO) {
+    public Response addProcessMaterialList(@RequestBody ProcessOrderDTO processOrderDTO) {
         Date date = new Date();
         processOrderDTO.setList_time(concreteDataFormat.DateToString(date));
         int newList = processService.addMaterialList(processOrderDTO);
