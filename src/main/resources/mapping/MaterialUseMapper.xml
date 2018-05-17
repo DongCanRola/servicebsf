@@ -106,13 +106,13 @@
       user = #{user,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByProcessOrder">
+  <select id="selectByProcessOrder" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from materialuse
     where processorderid = #{processorderid,jdbcType=INTEGER}
   </select>
-  <select id="selectByPurchaseStore">
+  <select id="selectByPurchaseStore" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from materialuse
