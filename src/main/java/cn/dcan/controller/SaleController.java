@@ -1,5 +1,6 @@
 package cn.dcan.controller;
 
+import cn.dcan.Service.AccountService;
 import cn.dcan.Service.SaleService;
 import cn.dcan.dto.SaleDTO;
 import cn.dcan.constrain.*;
@@ -19,6 +20,8 @@ public class SaleController {
 
     @Autowired
     SaleService saleService;
+    @Autowired
+    AccountService accountService;
 
     private ConcreteDataFormat concreteDataFormat = new ConcreteDataFormat();
 
@@ -46,6 +49,9 @@ public class SaleController {
     @ResponseBody
     public Response updateSaleOrder(@RequestBody SaleDTO saleDTO) {
         int currentState = saleDTO.getSale_state();
+        if(currentState == 4) {
+            accountService.addSaleGather(saleDTO);
+        }
         if(currentState == 4 || currentState == 8 || currentState == 11) {
             Date date = new Date();
             saleDTO.setSale_orderTime(concreteDataFormat.DateToString(date));
