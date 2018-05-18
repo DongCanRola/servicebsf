@@ -16,4 +16,7 @@ public interface CustomerService {
 
     //根据供应类型获取供应商列表
     List<CustomerDTO> getListByProvide(int type);
+
+    //更新客户信息
+    int updateCustomer(CustomerDTO customerDTO);
 }

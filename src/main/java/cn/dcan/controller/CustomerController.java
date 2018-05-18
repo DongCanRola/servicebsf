@@ -44,4 +44,14 @@ public class CustomerController {
         int cId = customerService.addCustomer(customerDTO);
         return Response.ok(new SimpleResponse(SimpleResponse.OK,Integer.toString(cId))).build();
     }
+
+    @RequestMapping(value = "/customer/update", method = RequestMethod.PUT)
+    @ResponseBody
+    public Response updateCustomer(@RequestBody CustomerDTO customerDTO) {
+        int result = customerService.updateCustomer(customerDTO);
+        if(result > 0) {
+            return Response.ok(new SimpleResponse(SimpleResponse.OK, "客户信息修改成功！")).build();
+        }
+        return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "客户信息修改失败！")).build();
+    }
 }

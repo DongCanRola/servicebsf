@@ -46,9 +46,20 @@ public class CustomerServiceImpl implements CustomerService{
         return customerDTOS;
     }
 
+    @Override
+    public int updateCustomer(CustomerDTO customerDTO) {
+        Customer customer = dtoToEntity(customerDTO);
+        return customerMapper.updateByPrimaryKeySelective(customer);
+    }
+
     private Customer dtoToEntity(CustomerDTO customerDTO) {
         Customer customer = new Customer();
-        customer.setType(customerDTO.getType());
+        if(customerDTO.getId() != 0) {
+            customer.setId(customerDTO.getId());
+        }
+        if(customerDTO.getType() != 0) {
+            customer.setType(customerDTO.getType());
+        }
         if(customerDTO.getProvideType() != 0) {
             customer.setProvidetype(customerDTO.getProvideType());
         }
