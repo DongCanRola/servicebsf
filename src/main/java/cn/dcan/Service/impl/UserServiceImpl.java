@@ -79,8 +79,17 @@ public class UserServiceImpl implements UserService{
         return 0;
     }
 
+    @Override
+    public int modifyUserMessage(UserDTO userDTO) {
+        User user = dtoToEntity(userDTO);
+        return userMapper.updateByPrimaryKeySelective(user);
+    }
+
     private User dtoToEntity(UserDTO userDTO) {
         User user = new User();
+        if(userDTO.getUser_id() != 0) {
+            user.setId(userDTO.getUser_id());
+        }
         if(userDTO.getUser_name() != null) {
             user.setName(userDTO.getUser_name());
         }

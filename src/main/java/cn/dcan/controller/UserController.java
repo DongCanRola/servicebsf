@@ -84,4 +84,13 @@ public class UserController {
         return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "密码修改失败！")).build();
     }
 
+    @RequestMapping(value = "/user/modify/message", method = RequestMethod.PUT)
+    @ResponseBody
+    public Response modifyUserMessage(@RequestBody UserDTO userDTO) {
+        int result = userService.modifyUserMessage(userDTO);
+        if(result > 0)
+            return Response.ok(new SimpleResponse(SimpleResponse.OK, "更新用户信息成功！")).build();
+        return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "更新用户信息失败！")).build();
+    }
+
 }
