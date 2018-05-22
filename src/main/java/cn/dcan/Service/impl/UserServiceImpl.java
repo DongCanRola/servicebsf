@@ -88,12 +88,18 @@ public class UserServiceImpl implements UserService{
     @Override
     public int modifyUserRole(UserDTO userDTO) {
         int userId = userDTO.getUser_id();
+        List<UserRoleKey> userRoleKeyList = getRoles(userId, userDTO.getUser_roles());
+        for(int i = 0; i <userRoleKeyList.size(); i++) {
+            System.out.println(userRoleKeyList.get(i).getUserid() + "," + userRoleKeyList.get(i).getRoleid());
+        }
+        //删除原有职责
         int deleteResult = userRoleMapper.deleteByUser(userId);
         if(deleteResult > 0) {
-            List<UserRoleKey> userRoleKeyList = getRoles(userId, userDTO.getUser_roles());
+            //插入新职责
             boolean result = true;
             int updateResult = 0;
             for(UserRoleKey userRoleKey : userRoleKeyList) {
+                System.out.println("now insert role: "+userRoleKey.getRoleid());
                 updateResult += userRoleMapper.insert(userRoleKey);
                 if(updateResult <= 0) {
                     result = false;
@@ -104,8 +110,37 @@ public class UserServiceImpl implements UserService{
                 return updateResult;
             else
                 return -1;
+        } else
+            return -1;
+        /*
+        if(deleteResult > 0) {
+
         }else
             return -1;
+         */
+    }
+
+    @Override
+    public int deleteUserRole(int userId) {
+        List<Integer> roles = userRoleMapper.selectByUser(userId);
+        int deleteResult = 0;
+        for(Integer i : roles) {
+            UserRoleKey userRoleKey = new UserRoleKey();
+            userRoleKey.setUserid(userId);
+            userRoleKey.setRoleid(i);
+            int cuRe = userRoleMapper.deleteByPrimaryKey(userRoleKey);
+            if(cuRe > 0)
+                deleteResult ++;
+            else {
+                return -1;
+            }
+        }
+        roles = userRoleMapper.selectByUser(userId);
+        for(Integer i: roles) {
+            System.out.println(i);
+        }
+        System.out.println("userrole " + userId + " delete result: "+ deleteResult);
+        return deleteResult;
     }
 
     private User dtoToEntity(UserDTO userDTO) {
@@ -136,8 +171,8 @@ public class UserServiceImpl implements UserService{
 
     private List<UserRoleKey> getRoles(int userId, ArrayList<Integer> roles) {
         List<UserRoleKey> result = new ArrayList<>();
-        UserRoleKey userRoleKey = new UserRoleKey();
         for(int roleId : roles) {
+            UserRoleKey userRoleKey = new UserRoleKey();
             userRoleKey.setUserid(userId);
             userRoleKey.setRoleid(roleId);
             result.add(userRoleKey);

@@ -96,9 +96,12 @@ public class UserController {
     @RequestMapping(value = "/user/modify/roles", method = RequestMethod.PUT)
     @ResponseBody
     public Response modifyRoles(@RequestBody UserDTO userDTO) {
-        int result = userService.modifyUserRole(userDTO);
-        if(result > 0)
-            return Response.ok(new SimpleResponse(SimpleResponse.OK, "更新职务成功！")).build();
+        //int deleteResult = userService.deleteUserRole(userDTO.getUser_id());
+        //if(deleteResult > 0) {
+            int result = userService.modifyUserRole(userDTO);
+            if(result > 0)
+                return Response.ok(new SimpleResponse(SimpleResponse.OK, "更新职务成功！")).build();
+        //}
         return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "更新职务失败！")).build();
     }
 

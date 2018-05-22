@@ -16,4 +16,6 @@ public interface UserService {
     int modifyUserMessage(UserDTO userDTO);
 
     int modifyUserRole(UserDTO userDTO);
+
+    int deleteUserRole(int userId);
 }
