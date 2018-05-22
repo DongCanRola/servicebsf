@@ -14,4 +14,6 @@ public interface UserService {
     int modifyUserPassword(int userId, byte[] oldPassword, byte[] newPassword);
 
     int modifyUserMessage(UserDTO userDTO);
+
+    int modifyUserRole(UserDTO userDTO);
 }

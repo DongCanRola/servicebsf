@@ -85,6 +85,29 @@ public class UserServiceImpl implements UserService{
         return userMapper.updateByPrimaryKeySelective(user);
     }
 
+    @Override
+    public int modifyUserRole(UserDTO userDTO) {
+        int userId = userDTO.getUser_id();
+        int deleteResult = userRoleMapper.deleteByUser(userId);
+        if(deleteResult > 0) {
+            List<UserRoleKey> userRoleKeyList = getRoles(userId, userDTO.getUser_roles());
+            boolean result = true;
+            int updateResult = 0;
+            for(UserRoleKey userRoleKey : userRoleKeyList) {
+                updateResult += userRoleMapper.insert(userRoleKey);
+                if(updateResult <= 0) {
+                    result = false;
+                    break;
+                }
+            }
+            if(result)
+                return updateResult;
+            else
+                return -1;
+        }else
+            return -1;
+    }
+
     private User dtoToEntity(UserDTO userDTO) {
         User user = new User();
         if(userDTO.getUser_id() != 0) {

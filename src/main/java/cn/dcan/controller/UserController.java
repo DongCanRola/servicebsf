@@ -93,4 +93,13 @@ public class UserController {
         return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "更新用户信息失败！")).build();
     }
 
+    @RequestMapping(value = "/user/modify/roles", method = RequestMethod.PUT)
+    @ResponseBody
+    public Response modifyRoles(@RequestBody UserDTO userDTO) {
+        int result = userService.modifyUserRole(userDTO);
+        if(result > 0)
+            return Response.ok(new SimpleResponse(SimpleResponse.OK, "更新职务成功！")).build();
+        return Response.ok(new SimpleResponse(SimpleResponse.ERROR, "更新职务失败！")).build();
+    }
+
 }

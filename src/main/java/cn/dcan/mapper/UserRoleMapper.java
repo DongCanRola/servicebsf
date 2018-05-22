@@ -12,5 +12,7 @@ public interface UserRoleMapper {
     int insertSelective(UserRoleKey record);
 
     //获取一个用户的所有角色
-    ArrayList<Integer> selectByUser(int userid);
+    ArrayList<Integer> selectByUser(Integer userid);
+
+    int deleteByUser(Integer userid);
 }

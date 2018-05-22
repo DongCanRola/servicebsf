@@ -37,4 +37,8 @@
     select roleid from userrole
     where userid = #{userid,jdbcType=INTEGER}
   </select>
+  <delete id="deleteByUser" parameterType="java.lang.Integer" >
+    delete from userrole
+    where userid = #{userid,jdbcType=INTEGER}
+  </delete>
 </mapper>
